@@ -1,0 +1,49 @@
+name: Build Reference Library
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'fill-missing | refresh-all'
+        required: true
+        default: 'fill-missing'
+  push:
+    branches: [ main ]
+    paths:
+      - 'references-manifest.json'
+      - 'scripts/build_references.py'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run downloader
+        env:
+          MODE: ${{ github.event.inputs.mode || 'fill-missing' }}
+        run: python scripts/build_references.py --mode "$MODE"
+
+      - name: Commit any new images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add base-photos/ parallels/
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update reference library [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
