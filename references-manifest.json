@@ -1,0 +1,183 @@
+{
+  "_README": {
+    "purpose": "Maps each reference image's repo path to a download spec. The build_references.py script reads this and downloads each image (running on GitHub Actions for unrestricted internet access).",
+    "format_url": "{ \"<path>.jpg\": { \"url\": \"https://...\", \"_note\": \"...\" } }  \u2014 explicit URL",
+    "format_search": "{ \"<path>.jpg\": { \"search\": \"player name product card#\" } }  \u2014 eBay search, script auto-finds image",
+    "running": "Click 'Actions' tab \u2192 'Build Reference Library' \u2192 'Run workflow'. The action runs the script on GitHub's servers (no network restrictions) and commits any new images.",
+    "tip": "Parallel references just need ANY card showing that pattern \u2014 player doesn't matter. Base photos need the EXACT card."
+  },
+  "base-photos/rice/2022-bowman-u-chrome-24.jpg": {
+    "search": "Kiki Rice 2022 Bowman University Chrome 24 base",
+    "url": "https://i.ebayimg.com/images/g/HJMAAOSwPwVnpiKE/s-l1600.jpg"
+  },
+  "base-photos/rice/2022-bowman-u-best-18.jpg": {
+    "search": "Kiki Rice 2022 Bowman University Best 18 base",
+    "url": "https://i.ebayimg.com/images/g/B6EAAOSwB9lnpjUW/s-l1600.jpg"
+  },
+  "base-photos/rice/2022-bowman-u-inception-52.jpg": {
+    "search": "Kiki Rice 2022 Bowman University Inception 52 base",
+    "url": "https://i.ebayimg.com/images/g/HuMAAOSwXrBnpizx/s-l1600.jpg"
+  },
+  "base-photos/nye/2025-prizm-wnba-15.jpg": {
+    "search": "Aaliyah Nye 2025 Panini Prizm WNBA 15 base"
+  },
+  "base-photos/wallace/2022-revolution-68.jpg": {
+    "search": "Tianna Hawkins 2022 Panini Revolution WNBA 68 base"
+  },
+  "base-photos/fagbenle/2025-prizm-wnba-68.jpg": {
+    "search": "Temi Fagbenle 2025 Panini Prizm WNBA 68 base"
+  },
+  "base-photos/fagbenle/2025-donruss-7.jpg": {
+    "search": "Temi Fagbenle 2025 Donruss WNBA 7 base"
+  },
+  "base-photos/fagbenle/2025-donruss-58.jpg": {
+    "search": "Temi Fagbenle 2025 Donruss WNBA 58 base"
+  },
+  "base-photos/sabally/2022-prizm-wnba-185.jpg": {
+    "search": "Nyara Sabally 2022 Panini Prizm WNBA 185 base"
+  },
+  "base-photos/sabally/2022-revolution-93.jpg": {
+    "search": "Nyara Sabally 2022 Panini Revolution WNBA 93 base"
+  },
+  "base-photos/sabally/2022-revolution-2.jpg": {
+    "search": "Nyara Sabally 2022 Panini Revolution WNBA 2 base"
+  },
+  "base-photos/sabally/2024-select-14.jpg": {
+    "search": "Nyara Sabally 2024 Panini Select WNBA 14 base"
+  },
+  "base-photos/sabally/2024-prizm-wnba-87.jpg": {
+    "search": "Nyara Sabally 2024 Panini Prizm WNBA 87 base"
+  },
+  "base-photos/sabally/2025-prizm-wnba-117.jpg": {
+    "search": "Nyara Sabally 2025 Panini Prizm WNBA 117 base"
+  },
+  "base-photos/sabally/2024-select-111.jpg": {
+    "search": "Nyara Sabally 2024 Panini Select WNBA 111 base"
+  },
+  "base-photos/sabally/2025-donruss-67.jpg": {
+    "search": "Nyara Sabally 2025 Donruss WNBA 67 base"
+  },
+  "base-photos/nurse/2024-prizm-wnba-10.jpg": {
+    "search": "Kia Nurse 2024 Panini Prizm WNBA 10 base",
+    "url": "https://i.ebayimg.com/images/g/cfoAAOSwMtJn3rSe/s-l1600.jpg"
+  },
+  "base-photos/nurse/2024-prizm-wnba-129.jpg": {
+    "search": "Kia Nurse 2024 Panini Prizm WNBA 129 base",
+    "url": "https://i.ebayimg.com/images/g/N-8AAOSwR8Vn73Hl/s-l1600.jpg"
+  },
+  "base-photos/nurse/2025-donruss-6.jpg": {
+    "search": "Kia Nurse 2025 Donruss WNBA 6 base"
+  },
+  "base-photos/nurse/2023-prizm-wnba-14.jpg": {
+    "search": "Kia Nurse 2023 Panini Prizm WNBA 14 base"
+  },
+  "base-photos/sykes/2020-prizm-wnba-42.jpg": {
+    "search": "Brittney Sykes 2020 Panini Prizm WNBA 42 base"
+  },
+  "base-photos/sykes/2025-prizm-wnba-121.jpg": {
+    "search": "Brittney Sykes 2025 Panini Prizm WNBA 121 base"
+  },
+  "base-photos/sykes/2025-donruss-18.jpg": {
+    "search": "Brittney Sykes 2025 Donruss WNBA 18 base"
+  },
+  "base-photos/sykes/2025-donruss-41.jpg": {
+    "search": "Brittney Sykes 2025 Donruss WNBA 41 base"
+  },
+  "base-photos/sykes/2024-prizm-monopoly-38.jpg": {
+    "search": "Brittney Sykes 2024 Panini Prizm Monopoly WNBA 38 base"
+  },
+  "base-photos/harrison/2024-prizm-wnba-6.jpg": {
+    "search": "Isabelle Harrison 2024 Panini Prizm WNBA 6 base"
+  },
+  "base-photos/harrison/2025-prizm-wnba-12.jpg": {
+    "search": "Isabelle Harrison 2025 Panini Prizm WNBA 12 base"
+  },
+  "base-photos/harrison/2024-prizm-monopoly-36.jpg": {
+    "search": "Isabelle Harrison 2024 Panini Prizm Monopoly WNBA 36 base"
+  },
+  "base-photos/harrison/2024-origins-59.jpg": {
+    "search": "Isabelle Harrison 2024 Panini Origins WNBA 59 base"
+  },
+  "parallels/bowman-u-chrome/refractor.jpg": {
+    "search": "Bowman University Chrome Refractor Kiki Rice"
+  },
+  "parallels/bowman-u-best/pink-lava-refractors.jpg": {
+    "search": "Bowman University Best Pink Lava Refractors Kiki Rice"
+  },
+  "parallels/bowman-u-best/red-refractors.jpg": {
+    "search": "Bowman University Best Red Refractors Kiki Rice"
+  },
+  "parallels/prizm-wnba/silver.jpg": {
+    "search": "Panini Prizm WNBA Silver Prizms Aaliyah Nye"
+  },
+  "parallels/prizm-wnba/ice.jpg": {
+    "search": "Panini Prizm WNBA Ice Prizms Aaliyah Nye"
+  },
+  "parallels/revolution/sunburst.jpg": {
+    "search": "Panini Revolution WNBA Sunburst Tianna Hawkins"
+  },
+  "parallels/donruss/jersey-series.jpg": {
+    "search": "Donruss WNBA Jersey Series Temi Fagbenle"
+  },
+  "parallels/donruss/pink-shimmer.jpg": {
+    "search": "Donruss WNBA Pink Shimmer Temi Fagbenle"
+  },
+  "parallels/revolution/rookie-revolution.jpg": {
+    "search": "Panini Revolution WNBA Rookie Revolution Nyara Sabally"
+  },
+  "parallels/select/select-future.jpg": {
+    "search": "Panini Select WNBA Select Future Nyara Sabally"
+  },
+  "parallels/prizm-wnba/green.jpg": {
+    "search": "Panini Prizm WNBA Green Prizms Nyara Sabally"
+  },
+  "parallels/donruss/holo.jpg": {
+    "search": "Donruss WNBA Holo Nyara Sabally"
+  },
+  "parallels/prizm-wnba/swirl.jpg": {
+    "search": "Panini Prizm WNBA Swirl Prizms Nyara Sabally"
+  },
+  "parallels/prizm-wnba/ruby-wave.jpg": {
+    "search": "Panini Prizm WNBA Ruby Wave Nyara Sabally"
+  },
+  "parallels/prizm-wnba/fractal.jpg": {
+    "search": "Panini Prizm WNBA Fractal Kia Nurse"
+  },
+  "parallels/donruss/yellow-lava.jpg": {
+    "search": "Donruss WNBA Yellow Lava Kia Nurse"
+  },
+  "parallels/prizm-wnba/fractal-prizms-mojo.jpg": {
+    "search": "Panini Prizm WNBA Fractal Prizms Mojo Kia Nurse"
+  },
+  "parallels/prizm-wnba/hyper.jpg": {
+    "search": "Panini Prizm WNBA Hyper Brittney Sykes"
+  },
+  "parallels/donruss/my-house-diamond.jpg": {
+    "search": "Donruss WNBA My House Diamond Brittney Sykes"
+  },
+  "parallels/donruss/lava.jpg": {
+    "search": "Donruss WNBA Lava Brittney Sykes"
+  },
+  "parallels/prizm-monopoly/silver.jpg": {
+    "search": "Panini Prizm Monopoly WNBA Silver Prizms Brittney Sykes"
+  },
+  "parallels/prizm-monopoly/pink.jpg": {
+    "search": "Panini Prizm Monopoly WNBA Pink Prizms Brittney Sykes"
+  },
+  "parallels/prizm-wnba/red.jpg": {
+    "search": "Panini Prizm WNBA Red Prizms Brittney Sykes"
+  },
+  "parallels/prizm-wnba/white-sparkle.jpg": {
+    "search": "Panini Prizm WNBA White Sparkle Prizms Isabelle Harrison"
+  },
+  "parallels/prizm-wnba/snakeskin.jpg": {
+    "search": "Panini Prizm WNBA Snakeskin Prizms Isabelle Harrison",
+    "url": "https://i.ebayimg.com/images/g/SJAAAOSwJpdoP4hS/s-l1600.jpg"
+  },
+  "parallels/prizm-wnba/blue-velocity.jpg": {
+    "search": "Panini Prizm WNBA Blue Velocity Prizms Isabelle Harrison"
+  },
+  "parallels/origins/teal.jpg": {
+    "search": "Panini Origins WNBA Teal Isabelle Harrison"
+  }
+}
