@@ -360,3 +360,68 @@ When evaluating a photo from eBay/COMC, ask in order:
 Notes from research session 2026-05-03 covering 2020-2025 Prizm WNBA, 2024-2025
 Monopoly, 2025 Donruss, 2022+ Revolution, 2024+ Origins, 2024+ Select,
 2022-23+ Bowman University Best/Chrome.
+
+---
+
+## Identification rules (HIGH PRIORITY — read these first)
+
+### Rule 1: Serial numbers override everything
+
+If a card photo clearly shows a serial number (e.g., "23/199" or "5/25"), use
+that to lock the parallel — don't second-guess from texture alone.
+
+- **/199** → most likely Blue Prizms (Prizm WNBA) or Red (Donruss WNBA, etc.)
+- **/149** → Purple Prizms or Pink Prizms (varies by year)
+- **/99** → Orange Prizms / Premium Box Set / Purple Prizms
+- **/75** → Sunburst (Revolution) / various
+- **/49** → Teal / Origins Teal
+- **/35** → Pink Pulsar / Teal (2025 Prizm)
+- **/25** → Mojo / Pink Shimmer / Pink Laser / Green Pulsar
+- **/10** → Gold / Gold Shimmer / Holo Gold Laser
+- **/5** → Black Gold / Yellow Lava / Jersey Number
+- **/1** (or "1/1") → Gold Vinyl / Black Finite / various 1/1s
+
+Cross-check the print run against the year+product's parallel checklist (in
+sections above) to find the exact match. Multiple parallels share print runs;
+use texture as the tiebreaker.
+
+### Rule 2: Watch for rotated/upside-down numbers
+
+Card serials are sometimes printed at strange angles (vertical, rotated 90°,
+upside down to fit the design). When reading a serial:
+- Look at ALL edges of the card and corners
+- A "61" might actually be "19" rotated 180°
+- A "11" might be "II" or just decorative
+- If the surrounding text helps anchor orientation (e.g., player name reads
+  left-to-right), use that to determine the correct number orientation
+
+When in doubt, mark as low-confidence and verify on receipt.
+
+### Rule 3: A back-of-card photo is showing the SAME card, not a new one
+
+When a user pastes multiple photos of cards and one is clearly a card BACK:
+- It's almost always being shown to reveal the serial number printed on the
+  back (common for numbered parallels — many brands put the serial on the
+  back, not the front)
+- DO NOT count it as a separate card in the batch
+- DO use the serial visible on the back to identify the parallel of one of
+  the FRONT photos
+- If unclear which front photo it pairs with, ask the user
+
+Common patterns:
+- "Front of card 1" → "Back of card 1 with serial /199" → "Front of card 2"
+  = 2 cards total, not 3
+- A photo with backs of 4 cards together followed by 4 individual fronts
+  = 4 cards total, the group photo just shows serials
+
+When counting physical cards in a batch, count distinct FRONTS only (unless
+the back clearly shows a different player/photo than any of the fronts).
+
+### Rule 4: Show your reference cross-check
+
+For every parallel call, cite which reference image folder I checked:
+- ✓ matched `parallels/prizm-wnba/snakeskin/candidate-003.jpg` (close pattern match)
+- ⚠️ ambiguous between `parallels/prizm-wnba/ice/` and `parallels/prizm-wnba/snakeskin/` — leaning Ice based on shard angularity
+
+This makes it auditable. The user can verify by opening the same reference
+file and confirming.
