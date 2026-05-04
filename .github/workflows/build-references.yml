@@ -20,6 +20,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # Prevent multiple concurrent runs racing each other
+    concurrency:
+      group: build-references
+      cancel-in-progress: false
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -36,8 +40,6 @@ jobs:
 
       - name: Clean up old single-file v4 references
         run: |
-          # v4 wrote single .jpg files; v5 needs folders with the same names.
-          # Remove all existing .jpg files in base-photos/ and parallels/ so v5 can create folders.
           find base-photos -maxdepth 3 -name "*.jpg" -type f -delete 2>/dev/null || true
           find parallels -maxdepth 3 -name "*.jpg" -type f -delete 2>/dev/null || true
           echo "Cleanup complete"
@@ -54,6 +56,8 @@ jobs:
           git add -A base-photos/ parallels/ || true
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update reference library [skip ci]"
+            # Handle concurrent runs that may have landed first
+            git pull --rebase origin main || git rebase --abort
             git push
           else
             echo "No changes to commit"
