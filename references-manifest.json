@@ -1,183 +1,1748 @@
 {
   "_README": {
-    "purpose": "Maps each reference image's repo path to a download spec. The build_references.py script reads this and downloads each image (running on GitHub Actions for unrestricted internet access).",
-    "format_url": "{ \"<path>.jpg\": { \"url\": \"https://...\", \"_note\": \"...\" } }  \u2014 explicit URL",
-    "format_search": "{ \"<path>.jpg\": { \"search\": \"player name product card#\" } }  \u2014 eBay search, script auto-finds image",
-    "running": "Click 'Actions' tab \u2192 'Build Reference Library' \u2192 'Run workflow'. The action runs the script on GitHub's servers (no network restrictions) and commits any new images.",
-    "tip": "Parallel references just need ANY card showing that pattern \u2014 player doesn't matter. Base photos need the EXACT card."
+    "purpose": "v5 manifest: each entry maps to a FOLDER, not a single file. Folder gets multiple candidate images.",
+    "format": "{ \"<folder-path>/\": { \"search\": \"primary query\", \"extra_searches\": [\"alt 1\", ...], \"min_candidates\": 3, \"max_candidates\": 15 } }",
+    "base_photos": "Each card's folder gets ~3-10 photos OF THE SAME CARD (different parallels share the photo). Use to disambiguate WHICH CARD this is.",
+    "parallels": "Each parallel's folder gets ~10-15 photos of DIFFERENT CARDS showing the same parallel pattern. Use to compare textures."
   },
-  "base-photos/rice/2022-bowman-u-chrome-24.jpg": {
-    "search": "Kiki Rice 2022 Bowman University Chrome 24 base",
-    "url": "https://i.ebayimg.com/images/g/HJMAAOSwPwVnpiKE/s-l1600.jpg"
+  "base-photos/rice/2022-bowman-u-chrome-24/": {
+    "search": "Kiki Rice 2022 Bowman University Chrome 24",
+    "extra_searches": [
+      "Kiki Rice 2022 Bowman University Chrome #24",
+      "Kiki Rice 2022 Bowman University Chrome 24 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/rice/2022-bowman-u-best-18.jpg": {
-    "search": "Kiki Rice 2022 Bowman University Best 18 base",
-    "url": "https://i.ebayimg.com/images/g/B6EAAOSwB9lnpjUW/s-l1600.jpg"
+  "base-photos/rice/2022-bowman-u-best-18/": {
+    "search": "Kiki Rice 2022 Bowman University Best 18",
+    "extra_searches": [
+      "Kiki Rice 2022 Bowman University Best #18",
+      "Kiki Rice 2022 Bowman University Best 18 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/rice/2022-bowman-u-inception-52.jpg": {
-    "search": "Kiki Rice 2022 Bowman University Inception 52 base",
-    "url": "https://i.ebayimg.com/images/g/HuMAAOSwXrBnpizx/s-l1600.jpg"
+  "base-photos/rice/2022-bowman-u-inception-52/": {
+    "search": "Kiki Rice 2022 Bowman University Inception 52",
+    "extra_searches": [
+      "Kiki Rice 2022 Bowman University Inception #52",
+      "Kiki Rice 2022 Bowman University Inception 52 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/nye/2025-prizm-wnba-15.jpg": {
-    "search": "Aaliyah Nye 2025 Panini Prizm WNBA 15 base"
+  "base-photos/nye/2025-prizm-wnba-15/": {
+    "search": "Aaliyah Nye 2025 Panini Prizm WNBA 15",
+    "extra_searches": [
+      "Aaliyah Nye 2025 Panini Prizm WNBA #15",
+      "Aaliyah Nye 2025 Panini Prizm WNBA 15 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/wallace/2022-revolution-68.jpg": {
-    "search": "Tianna Hawkins 2022 Panini Revolution WNBA 68 base"
+  "base-photos/wallace/2022-revolution-68/": {
+    "search": "Tianna Hawkins 2022 Panini Revolution WNBA 68",
+    "extra_searches": [
+      "Tianna Hawkins 2022 Panini Revolution WNBA #68",
+      "Tianna Hawkins 2022 Panini Revolution WNBA 68 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/fagbenle/2025-prizm-wnba-68.jpg": {
-    "search": "Temi Fagbenle 2025 Panini Prizm WNBA 68 base"
+  "base-photos/fagbenle/2025-prizm-wnba-68/": {
+    "search": "Temi Fagbenle 2025 Panini Prizm WNBA 68",
+    "extra_searches": [
+      "Temi Fagbenle 2025 Panini Prizm WNBA #68",
+      "Temi Fagbenle 2025 Panini Prizm WNBA 68 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/fagbenle/2025-donruss-7.jpg": {
-    "search": "Temi Fagbenle 2025 Donruss WNBA 7 base"
+  "base-photos/fagbenle/2025-donruss-7/": {
+    "search": "Temi Fagbenle 2025 Donruss WNBA 7",
+    "extra_searches": [
+      "Temi Fagbenle 2025 Donruss WNBA #7",
+      "Temi Fagbenle 2025 Donruss WNBA 7 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/fagbenle/2025-donruss-58.jpg": {
-    "search": "Temi Fagbenle 2025 Donruss WNBA 58 base"
+  "base-photos/fagbenle/2025-donruss-58/": {
+    "search": "Temi Fagbenle 2025 Donruss WNBA 58",
+    "extra_searches": [
+      "Temi Fagbenle 2025 Donruss WNBA #58",
+      "Temi Fagbenle 2025 Donruss WNBA 58 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2022-prizm-wnba-185.jpg": {
-    "search": "Nyara Sabally 2022 Panini Prizm WNBA 185 base"
+  "base-photos/sabally/2022-prizm-wnba-185/": {
+    "search": "Nyara Sabally 2022 Panini Prizm WNBA 185",
+    "extra_searches": [
+      "Nyara Sabally 2022 Panini Prizm WNBA #185",
+      "Nyara Sabally 2022 Panini Prizm WNBA 185 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2022-revolution-93.jpg": {
-    "search": "Nyara Sabally 2022 Panini Revolution WNBA 93 base"
+  "base-photos/sabally/2022-revolution-93/": {
+    "search": "Nyara Sabally 2022 Panini Revolution WNBA 93",
+    "extra_searches": [
+      "Nyara Sabally 2022 Panini Revolution WNBA #93",
+      "Nyara Sabally 2022 Panini Revolution WNBA 93 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2022-revolution-2.jpg": {
-    "search": "Nyara Sabally 2022 Panini Revolution WNBA 2 base"
+  "base-photos/sabally/2022-revolution-2/": {
+    "search": "Nyara Sabally 2022 Panini Revolution WNBA 2",
+    "extra_searches": [
+      "Nyara Sabally 2022 Panini Revolution WNBA #2",
+      "Nyara Sabally 2022 Panini Revolution WNBA 2 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2024-select-14.jpg": {
-    "search": "Nyara Sabally 2024 Panini Select WNBA 14 base"
+  "base-photos/sabally/2024-select-14/": {
+    "search": "Nyara Sabally 2024 Panini Select WNBA 14",
+    "extra_searches": [
+      "Nyara Sabally 2024 Panini Select WNBA #14",
+      "Nyara Sabally 2024 Panini Select WNBA 14 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2024-prizm-wnba-87.jpg": {
-    "search": "Nyara Sabally 2024 Panini Prizm WNBA 87 base"
+  "base-photos/sabally/2024-prizm-wnba-87/": {
+    "search": "Nyara Sabally 2024 Panini Prizm WNBA 87",
+    "extra_searches": [
+      "Nyara Sabally 2024 Panini Prizm WNBA #87",
+      "Nyara Sabally 2024 Panini Prizm WNBA 87 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2025-prizm-wnba-117.jpg": {
-    "search": "Nyara Sabally 2025 Panini Prizm WNBA 117 base"
+  "base-photos/sabally/2025-prizm-wnba-117/": {
+    "search": "Nyara Sabally 2025 Panini Prizm WNBA 117",
+    "extra_searches": [
+      "Nyara Sabally 2025 Panini Prizm WNBA #117",
+      "Nyara Sabally 2025 Panini Prizm WNBA 117 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2024-select-111.jpg": {
-    "search": "Nyara Sabally 2024 Panini Select WNBA 111 base"
+  "base-photos/sabally/2024-select-111/": {
+    "search": "Nyara Sabally 2024 Panini Select WNBA 111",
+    "extra_searches": [
+      "Nyara Sabally 2024 Panini Select WNBA #111",
+      "Nyara Sabally 2024 Panini Select WNBA 111 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sabally/2025-donruss-67.jpg": {
-    "search": "Nyara Sabally 2025 Donruss WNBA 67 base"
+  "base-photos/sabally/2025-donruss-67/": {
+    "search": "Nyara Sabally 2025 Donruss WNBA 67",
+    "extra_searches": [
+      "Nyara Sabally 2025 Donruss WNBA #67",
+      "Nyara Sabally 2025 Donruss WNBA 67 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/nurse/2024-prizm-wnba-10.jpg": {
-    "search": "Kia Nurse 2024 Panini Prizm WNBA 10 base",
-    "url": "https://i.ebayimg.com/images/g/cfoAAOSwMtJn3rSe/s-l1600.jpg"
+  "base-photos/nurse/2024-prizm-wnba-10/": {
+    "search": "Kia Nurse 2024 Panini Prizm WNBA 10",
+    "extra_searches": [
+      "Kia Nurse 2024 Panini Prizm WNBA #10",
+      "Kia Nurse 2024 Panini Prizm WNBA 10 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/nurse/2024-prizm-wnba-129.jpg": {
-    "search": "Kia Nurse 2024 Panini Prizm WNBA 129 base",
-    "url": "https://i.ebayimg.com/images/g/N-8AAOSwR8Vn73Hl/s-l1600.jpg"
+  "base-photos/nurse/2024-prizm-wnba-129/": {
+    "search": "Kia Nurse 2024 Panini Prizm WNBA 129",
+    "extra_searches": [
+      "Kia Nurse 2024 Panini Prizm WNBA #129",
+      "Kia Nurse 2024 Panini Prizm WNBA 129 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/nurse/2025-donruss-6.jpg": {
-    "search": "Kia Nurse 2025 Donruss WNBA 6 base"
+  "base-photos/nurse/2025-donruss-6/": {
+    "search": "Kia Nurse 2025 Donruss WNBA 6",
+    "extra_searches": [
+      "Kia Nurse 2025 Donruss WNBA #6",
+      "Kia Nurse 2025 Donruss WNBA 6 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/nurse/2023-prizm-wnba-14.jpg": {
-    "search": "Kia Nurse 2023 Panini Prizm WNBA 14 base"
+  "base-photos/nurse/2023-prizm-wnba-14/": {
+    "search": "Kia Nurse 2023 Panini Prizm WNBA 14",
+    "extra_searches": [
+      "Kia Nurse 2023 Panini Prizm WNBA #14",
+      "Kia Nurse 2023 Panini Prizm WNBA 14 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sykes/2020-prizm-wnba-42.jpg": {
-    "search": "Brittney Sykes 2020 Panini Prizm WNBA 42 base"
+  "base-photos/sykes/2020-prizm-wnba-42/": {
+    "search": "Brittney Sykes 2020 Panini Prizm WNBA 42",
+    "extra_searches": [
+      "Brittney Sykes 2020 Panini Prizm WNBA #42",
+      "Brittney Sykes 2020 Panini Prizm WNBA 42 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sykes/2025-prizm-wnba-121.jpg": {
-    "search": "Brittney Sykes 2025 Panini Prizm WNBA 121 base"
+  "base-photos/sykes/2025-prizm-wnba-121/": {
+    "search": "Brittney Sykes 2025 Panini Prizm WNBA 121",
+    "extra_searches": [
+      "Brittney Sykes 2025 Panini Prizm WNBA #121",
+      "Brittney Sykes 2025 Panini Prizm WNBA 121 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sykes/2025-donruss-18.jpg": {
-    "search": "Brittney Sykes 2025 Donruss WNBA 18 base"
+  "base-photos/sykes/2025-donruss-18/": {
+    "search": "Brittney Sykes 2025 Donruss WNBA 18",
+    "extra_searches": [
+      "Brittney Sykes 2025 Donruss WNBA #18",
+      "Brittney Sykes 2025 Donruss WNBA 18 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sykes/2025-donruss-41.jpg": {
-    "search": "Brittney Sykes 2025 Donruss WNBA 41 base"
+  "base-photos/sykes/2025-donruss-41/": {
+    "search": "Brittney Sykes 2025 Donruss WNBA 41",
+    "extra_searches": [
+      "Brittney Sykes 2025 Donruss WNBA #41",
+      "Brittney Sykes 2025 Donruss WNBA 41 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/sykes/2024-prizm-monopoly-38.jpg": {
-    "search": "Brittney Sykes 2024 Panini Prizm Monopoly WNBA 38 base"
+  "base-photos/sykes/2024-prizm-monopoly-38/": {
+    "search": "Brittney Sykes 2024 Panini Prizm Monopoly WNBA 38",
+    "extra_searches": [
+      "Brittney Sykes 2024 Panini Prizm Monopoly WNBA #38",
+      "Brittney Sykes 2024 Panini Prizm Monopoly WNBA 38 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/harrison/2024-prizm-wnba-6.jpg": {
-    "search": "Isabelle Harrison 2024 Panini Prizm WNBA 6 base"
+  "base-photos/harrison/2024-prizm-wnba-6/": {
+    "search": "Isabelle Harrison 2024 Panini Prizm WNBA 6",
+    "extra_searches": [
+      "Isabelle Harrison 2024 Panini Prizm WNBA #6",
+      "Isabelle Harrison 2024 Panini Prizm WNBA 6 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/harrison/2025-prizm-wnba-12.jpg": {
-    "search": "Isabelle Harrison 2025 Panini Prizm WNBA 12 base"
+  "base-photos/harrison/2025-prizm-wnba-12/": {
+    "search": "Isabelle Harrison 2025 Panini Prizm WNBA 12",
+    "extra_searches": [
+      "Isabelle Harrison 2025 Panini Prizm WNBA #12",
+      "Isabelle Harrison 2025 Panini Prizm WNBA 12 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/harrison/2024-prizm-monopoly-36.jpg": {
-    "search": "Isabelle Harrison 2024 Panini Prizm Monopoly WNBA 36 base"
+  "base-photos/harrison/2024-prizm-monopoly-36/": {
+    "search": "Isabelle Harrison 2024 Panini Prizm Monopoly WNBA 36",
+    "extra_searches": [
+      "Isabelle Harrison 2024 Panini Prizm Monopoly WNBA #36",
+      "Isabelle Harrison 2024 Panini Prizm Monopoly WNBA 36 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "base-photos/harrison/2024-origins-59.jpg": {
-    "search": "Isabelle Harrison 2024 Panini Origins WNBA 59 base"
+  "base-photos/harrison/2024-origins-59/": {
+    "search": "Isabelle Harrison 2024 Panini Origins WNBA 59",
+    "extra_searches": [
+      "Isabelle Harrison 2024 Panini Origins WNBA #59",
+      "Isabelle Harrison 2024 Panini Origins WNBA 59 base"
+    ],
+    "min_candidates": 3,
+    "max_candidates": 8
   },
-  "parallels/bowman-u-chrome/refractor.jpg": {
-    "search": "Bowman University Chrome Refractor Kiki Rice"
+  "parallels/bowman-u-chrome/refractor/": {
+    "search": "Bowman University Chrome Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Refractor Caitlin Clark",
+      "Bowman University Chrome Refractor Paige Bueckers",
+      "Bowman University Chrome Refractor JuJu Watkins",
+      "Bowman University Chrome Refractor Hannah Hidalgo",
+      "Bowman University Chrome Refractor Kiki Rice",
+      "Bowman University Chrome Refractor Cameron Brink"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/bowman-u-best/pink-lava-refractors.jpg": {
-    "search": "Bowman University Best Pink Lava Refractors Kiki Rice"
+  "parallels/bowman-u-best/pink-lava-refractors/": {
+    "search": "Bowman University Best Pink Lava Refractors card",
+    "extra_searches": [
+      "Bowman University Best Pink Lava Refractors Caitlin Clark",
+      "Bowman University Best Pink Lava Refractors Paige Bueckers",
+      "Bowman University Best Pink Lava Refractors JuJu Watkins",
+      "Bowman University Best Pink Lava Refractors Hannah Hidalgo",
+      "Bowman University Best Pink Lava Refractors Kiki Rice",
+      "Bowman University Best Pink Lava Refractors Cameron Brink"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/bowman-u-best/red-refractors.jpg": {
-    "search": "Bowman University Best Red Refractors Kiki Rice"
+  "parallels/bowman-u-best/red-refractors/": {
+    "search": "Bowman University Best Red Refractors card",
+    "extra_searches": [
+      "Bowman University Best Red Refractors Caitlin Clark",
+      "Bowman University Best Red Refractors Paige Bueckers",
+      "Bowman University Best Red Refractors JuJu Watkins",
+      "Bowman University Best Red Refractors Hannah Hidalgo",
+      "Bowman University Best Red Refractors Kiki Rice",
+      "Bowman University Best Red Refractors Cameron Brink"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/silver.jpg": {
-    "search": "Panini Prizm WNBA Silver Prizms Aaliyah Nye"
+  "parallels/prizm-wnba/silver/": {
+    "search": "Panini Prizm WNBA Silver Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Silver Prizms Caitlin Clark",
+      "Panini Prizm WNBA Silver Prizms Angel Reese",
+      "Panini Prizm WNBA Silver Prizms A'ja Wilson",
+      "Panini Prizm WNBA Silver Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Silver Prizms Breanna Stewart",
+      "Panini Prizm WNBA Silver Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/ice.jpg": {
-    "search": "Panini Prizm WNBA Ice Prizms Aaliyah Nye"
+  "parallels/prizm-wnba/ice/": {
+    "search": "Panini Prizm WNBA Ice Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Ice Prizms Caitlin Clark",
+      "Panini Prizm WNBA Ice Prizms Angel Reese",
+      "Panini Prizm WNBA Ice Prizms A'ja Wilson",
+      "Panini Prizm WNBA Ice Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Ice Prizms Breanna Stewart",
+      "Panini Prizm WNBA Ice Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/revolution/sunburst.jpg": {
-    "search": "Panini Revolution WNBA Sunburst Tianna Hawkins"
+  "parallels/revolution/sunburst/": {
+    "search": "Panini Revolution WNBA Sunburst card",
+    "extra_searches": [
+      "Panini Revolution WNBA Sunburst Sabrina Ionescu",
+      "Panini Revolution WNBA Sunburst A'ja Wilson",
+      "Panini Revolution WNBA Sunburst Breanna Stewart",
+      "Panini Revolution WNBA Sunburst Diana Taurasi",
+      "Panini Revolution WNBA Sunburst Candace Parker",
+      "Panini Revolution WNBA Sunburst Skylar Diggins"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/donruss/jersey-series.jpg": {
-    "search": "Donruss WNBA Jersey Series Temi Fagbenle"
+  "parallels/donruss/jersey-series/": {
+    "search": "Donruss WNBA Jersey Series card",
+    "extra_searches": [
+      "Donruss WNBA Jersey Series Caitlin Clark",
+      "Donruss WNBA Jersey Series Angel Reese",
+      "Donruss WNBA Jersey Series A'ja Wilson",
+      "Donruss WNBA Jersey Series Sabrina Ionescu",
+      "Donruss WNBA Jersey Series Paige Bueckers",
+      "Donruss WNBA Jersey Series Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/donruss/pink-shimmer.jpg": {
-    "search": "Donruss WNBA Pink Shimmer Temi Fagbenle"
+  "parallels/donruss/pink-shimmer/": {
+    "search": "Donruss WNBA Pink Shimmer card",
+    "extra_searches": [
+      "Donruss WNBA Pink Shimmer Caitlin Clark",
+      "Donruss WNBA Pink Shimmer Angel Reese",
+      "Donruss WNBA Pink Shimmer A'ja Wilson",
+      "Donruss WNBA Pink Shimmer Sabrina Ionescu",
+      "Donruss WNBA Pink Shimmer Paige Bueckers",
+      "Donruss WNBA Pink Shimmer Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/revolution/rookie-revolution.jpg": {
-    "search": "Panini Revolution WNBA Rookie Revolution Nyara Sabally"
+  "parallels/revolution/rookie-revolution/": {
+    "search": "Panini Revolution WNBA Rookie Revolution card",
+    "extra_searches": [
+      "Panini Revolution WNBA Rookie Revolution Sabrina Ionescu",
+      "Panini Revolution WNBA Rookie Revolution A'ja Wilson",
+      "Panini Revolution WNBA Rookie Revolution Breanna Stewart",
+      "Panini Revolution WNBA Rookie Revolution Diana Taurasi",
+      "Panini Revolution WNBA Rookie Revolution Candace Parker",
+      "Panini Revolution WNBA Rookie Revolution Skylar Diggins"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/select/select-future.jpg": {
-    "search": "Panini Select WNBA Select Future Nyara Sabally"
+  "parallels/select/select-future/": {
+    "search": "Panini Select WNBA Select Future card",
+    "extra_searches": [
+      "Panini Select WNBA Select Future Caitlin Clark",
+      "Panini Select WNBA Select Future Angel Reese",
+      "Panini Select WNBA Select Future A'ja Wilson",
+      "Panini Select WNBA Select Future Sabrina Ionescu",
+      "Panini Select WNBA Select Future Cameron Brink"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/green.jpg": {
-    "search": "Panini Prizm WNBA Green Prizms Nyara Sabally"
+  "parallels/prizm-wnba/green/": {
+    "search": "Panini Prizm WNBA Green Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Green Prizms Caitlin Clark",
+      "Panini Prizm WNBA Green Prizms Angel Reese",
+      "Panini Prizm WNBA Green Prizms A'ja Wilson",
+      "Panini Prizm WNBA Green Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Green Prizms Breanna Stewart",
+      "Panini Prizm WNBA Green Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/donruss/holo.jpg": {
-    "search": "Donruss WNBA Holo Nyara Sabally"
+  "parallels/donruss/holo/": {
+    "search": "Donruss WNBA Holo card",
+    "extra_searches": [
+      "Donruss WNBA Holo Caitlin Clark",
+      "Donruss WNBA Holo Angel Reese",
+      "Donruss WNBA Holo A'ja Wilson",
+      "Donruss WNBA Holo Sabrina Ionescu",
+      "Donruss WNBA Holo Paige Bueckers",
+      "Donruss WNBA Holo Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/swirl.jpg": {
-    "search": "Panini Prizm WNBA Swirl Prizms Nyara Sabally"
+  "parallels/prizm-wnba/swirl/": {
+    "search": "Panini Prizm WNBA Swirl Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Swirl Prizms Caitlin Clark",
+      "Panini Prizm WNBA Swirl Prizms Angel Reese",
+      "Panini Prizm WNBA Swirl Prizms A'ja Wilson",
+      "Panini Prizm WNBA Swirl Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Swirl Prizms Breanna Stewart",
+      "Panini Prizm WNBA Swirl Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/ruby-wave.jpg": {
-    "search": "Panini Prizm WNBA Ruby Wave Nyara Sabally"
+  "parallels/prizm-wnba/ruby-wave/": {
+    "search": "Panini Prizm WNBA Ruby Wave card",
+    "extra_searches": [
+      "Panini Prizm WNBA Ruby Wave Sabrina Ionescu",
+      "Panini Prizm WNBA Ruby Wave A'ja Wilson",
+      "Panini Prizm WNBA Ruby Wave Diana Taurasi",
+      "Panini Prizm WNBA Ruby Wave Sue Bird",
+      "Panini Prizm WNBA Ruby Wave Candace Parker",
+      "Panini Prizm WNBA Ruby Wave Breanna Stewart"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/fractal.jpg": {
-    "search": "Panini Prizm WNBA Fractal Kia Nurse"
+  "parallels/prizm-wnba/fractal/": {
+    "search": "Panini Prizm WNBA Fractal card",
+    "extra_searches": [
+      "Panini Prizm WNBA Fractal Caitlin Clark",
+      "Panini Prizm WNBA Fractal Angel Reese",
+      "Panini Prizm WNBA Fractal A'ja Wilson",
+      "Panini Prizm WNBA Fractal Sabrina Ionescu",
+      "Panini Prizm WNBA Fractal Breanna Stewart",
+      "Panini Prizm WNBA Fractal Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/donruss/yellow-lava.jpg": {
-    "search": "Donruss WNBA Yellow Lava Kia Nurse"
+  "parallels/donruss/yellow-lava/": {
+    "search": "Donruss WNBA Yellow Lava card",
+    "extra_searches": [
+      "Donruss WNBA Yellow Lava Caitlin Clark",
+      "Donruss WNBA Yellow Lava Angel Reese",
+      "Donruss WNBA Yellow Lava A'ja Wilson",
+      "Donruss WNBA Yellow Lava Sabrina Ionescu",
+      "Donruss WNBA Yellow Lava Paige Bueckers",
+      "Donruss WNBA Yellow Lava Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/fractal-prizms-mojo.jpg": {
-    "search": "Panini Prizm WNBA Fractal Prizms Mojo Kia Nurse"
+  "parallels/prizm-wnba/fractal-prizms-mojo/": {
+    "search": "Panini Prizm WNBA Fractal Prizms Mojo card",
+    "extra_searches": [
+      "Panini Prizm WNBA Fractal Prizms Mojo Caitlin Clark",
+      "Panini Prizm WNBA Fractal Prizms Mojo Angel Reese",
+      "Panini Prizm WNBA Fractal Prizms Mojo A'ja Wilson",
+      "Panini Prizm WNBA Fractal Prizms Mojo Sabrina Ionescu",
+      "Panini Prizm WNBA Fractal Prizms Mojo Breanna Stewart",
+      "Panini Prizm WNBA Fractal Prizms Mojo Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/hyper.jpg": {
-    "search": "Panini Prizm WNBA Hyper Brittney Sykes"
+  "parallels/prizm-wnba/hyper/": {
+    "search": "Panini Prizm WNBA Hyper card",
+    "extra_searches": [
+      "Panini Prizm WNBA Hyper Sabrina Ionescu",
+      "Panini Prizm WNBA Hyper A'ja Wilson",
+      "Panini Prizm WNBA Hyper Diana Taurasi",
+      "Panini Prizm WNBA Hyper Sue Bird",
+      "Panini Prizm WNBA Hyper Candace Parker",
+      "Panini Prizm WNBA Hyper Breanna Stewart"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/donruss/my-house-diamond.jpg": {
-    "search": "Donruss WNBA My House Diamond Brittney Sykes"
+  "parallels/donruss/my-house-diamond/": {
+    "search": "Donruss WNBA My House Diamond card",
+    "extra_searches": [
+      "Donruss WNBA My House Diamond Caitlin Clark",
+      "Donruss WNBA My House Diamond Angel Reese",
+      "Donruss WNBA My House Diamond A'ja Wilson",
+      "Donruss WNBA My House Diamond Sabrina Ionescu",
+      "Donruss WNBA My House Diamond Paige Bueckers",
+      "Donruss WNBA My House Diamond Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/donruss/lava.jpg": {
-    "search": "Donruss WNBA Lava Brittney Sykes"
+  "parallels/donruss/lava/": {
+    "search": "Donruss WNBA Lava card",
+    "extra_searches": [
+      "Donruss WNBA Lava Caitlin Clark",
+      "Donruss WNBA Lava Angel Reese",
+      "Donruss WNBA Lava A'ja Wilson",
+      "Donruss WNBA Lava Sabrina Ionescu",
+      "Donruss WNBA Lava Paige Bueckers",
+      "Donruss WNBA Lava Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-monopoly/silver.jpg": {
-    "search": "Panini Prizm Monopoly WNBA Silver Prizms Brittney Sykes"
+  "parallels/prizm-monopoly/silver/": {
+    "search": "Panini Prizm Monopoly WNBA Silver Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Silver Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Silver Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Silver Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Silver Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Silver Prizms Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-monopoly/pink.jpg": {
-    "search": "Panini Prizm Monopoly WNBA Pink Prizms Brittney Sykes"
+  "parallels/prizm-monopoly/pink/": {
+    "search": "Panini Prizm Monopoly WNBA Pink Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Pink Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Pink Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Pink Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Pink Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Pink Prizms Kelsey Plum"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/red.jpg": {
-    "search": "Panini Prizm WNBA Red Prizms Brittney Sykes"
+  "parallels/prizm-wnba/red/": {
+    "search": "Panini Prizm WNBA Red Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Red Prizms Caitlin Clark",
+      "Panini Prizm WNBA Red Prizms Angel Reese",
+      "Panini Prizm WNBA Red Prizms A'ja Wilson",
+      "Panini Prizm WNBA Red Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Red Prizms Breanna Stewart",
+      "Panini Prizm WNBA Red Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/white-sparkle.jpg": {
-    "search": "Panini Prizm WNBA White Sparkle Prizms Isabelle Harrison"
+  "parallels/prizm-wnba/white-sparkle/": {
+    "search": "Panini Prizm WNBA White Sparkle Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA White Sparkle Prizms Caitlin Clark",
+      "Panini Prizm WNBA White Sparkle Prizms Angel Reese",
+      "Panini Prizm WNBA White Sparkle Prizms A'ja Wilson",
+      "Panini Prizm WNBA White Sparkle Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA White Sparkle Prizms Breanna Stewart",
+      "Panini Prizm WNBA White Sparkle Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/snakeskin.jpg": {
-    "search": "Panini Prizm WNBA Snakeskin Prizms Isabelle Harrison",
-    "url": "https://i.ebayimg.com/images/g/SJAAAOSwJpdoP4hS/s-l1600.jpg"
+  "parallels/prizm-wnba/snakeskin/": {
+    "search": "Panini Prizm WNBA Snakeskin Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Snakeskin Prizms Caitlin Clark",
+      "Panini Prizm WNBA Snakeskin Prizms Angel Reese",
+      "Panini Prizm WNBA Snakeskin Prizms A'ja Wilson",
+      "Panini Prizm WNBA Snakeskin Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Snakeskin Prizms Breanna Stewart",
+      "Panini Prizm WNBA Snakeskin Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/prizm-wnba/blue-velocity.jpg": {
-    "search": "Panini Prizm WNBA Blue Velocity Prizms Isabelle Harrison"
+  "parallels/prizm-wnba/blue-velocity/": {
+    "search": "Panini Prizm WNBA Blue Velocity Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Blue Velocity Prizms Caitlin Clark",
+      "Panini Prizm WNBA Blue Velocity Prizms Angel Reese",
+      "Panini Prizm WNBA Blue Velocity Prizms A'ja Wilson",
+      "Panini Prizm WNBA Blue Velocity Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Blue Velocity Prizms Breanna Stewart",
+      "Panini Prizm WNBA Blue Velocity Prizms Paige Bueckers"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
   },
-  "parallels/origins/teal.jpg": {
-    "search": "Panini Origins WNBA Teal Isabelle Harrison"
+  "parallels/origins/teal/": {
+    "search": "Panini Origins WNBA Teal card",
+    "extra_searches": [
+      "Panini Origins WNBA Teal Caitlin Clark",
+      "Panini Origins WNBA Teal Angel Reese",
+      "Panini Origins WNBA Teal A'ja Wilson",
+      "Panini Origins WNBA Teal Sabrina Ionescu"
+    ],
+    "min_candidates": 5,
+    "max_candidates": 15
+  },
+  "parallels/prizm-wnba/pandora/": {
+    "search": "Panini Prizm WNBA Pandora Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Pandora Prizms Caitlin Clark",
+      "Panini Prizm WNBA Pandora Prizms Angel Reese",
+      "Panini Prizm WNBA Pandora Prizms A'ja Wilson",
+      "Panini Prizm WNBA Pandora Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Pandora Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/donut/": {
+    "search": "Panini Prizm WNBA Donut Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Donut Prizms Caitlin Clark",
+      "Panini Prizm WNBA Donut Prizms Angel Reese",
+      "Panini Prizm WNBA Donut Prizms A'ja Wilson",
+      "Panini Prizm WNBA Donut Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Donut Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/white-seismic/": {
+    "search": "Panini Prizm WNBA White Seismic Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA White Seismic Prizms Caitlin Clark",
+      "Panini Prizm WNBA White Seismic Prizms Angel Reese",
+      "Panini Prizm WNBA White Seismic Prizms A'ja Wilson",
+      "Panini Prizm WNBA White Seismic Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA White Seismic Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/checkerboard/": {
+    "search": "Panini Prizm WNBA Checkerboard Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Checkerboard Prizms Caitlin Clark",
+      "Panini Prizm WNBA Checkerboard Prizms Angel Reese",
+      "Panini Prizm WNBA Checkerboard Prizms A'ja Wilson",
+      "Panini Prizm WNBA Checkerboard Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Checkerboard Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/tie-dye/": {
+    "search": "Panini Prizm WNBA Tie Dye Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Tie Dye Prizms Caitlin Clark",
+      "Panini Prizm WNBA Tie Dye Prizms Angel Reese",
+      "Panini Prizm WNBA Tie Dye Prizms A'ja Wilson",
+      "Panini Prizm WNBA Tie Dye Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Tie Dye Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/hyper-pink/": {
+    "search": "Panini Prizm WNBA Hyper Pink Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Hyper Pink Prizms Caitlin Clark",
+      "Panini Prizm WNBA Hyper Pink Prizms Angel Reese",
+      "Panini Prizm WNBA Hyper Pink Prizms A'ja Wilson",
+      "Panini Prizm WNBA Hyper Pink Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Hyper Pink Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/blue/": {
+    "search": "Panini Prizm WNBA Blue Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Blue Prizms Caitlin Clark",
+      "Panini Prizm WNBA Blue Prizms Angel Reese",
+      "Panini Prizm WNBA Blue Prizms A'ja Wilson",
+      "Panini Prizm WNBA Blue Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Blue Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/purple/": {
+    "search": "Panini Prizm WNBA Purple Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Purple Prizms Caitlin Clark",
+      "Panini Prizm WNBA Purple Prizms Angel Reese",
+      "Panini Prizm WNBA Purple Prizms A'ja Wilson",
+      "Panini Prizm WNBA Purple Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Purple Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/pink/": {
+    "search": "Panini Prizm WNBA Pink Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Pink Prizms Caitlin Clark",
+      "Panini Prizm WNBA Pink Prizms Angel Reese",
+      "Panini Prizm WNBA Pink Prizms A'ja Wilson",
+      "Panini Prizm WNBA Pink Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Pink Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/orange/": {
+    "search": "Panini Prizm WNBA Orange Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Orange Prizms Caitlin Clark",
+      "Panini Prizm WNBA Orange Prizms Angel Reese",
+      "Panini Prizm WNBA Orange Prizms A'ja Wilson",
+      "Panini Prizm WNBA Orange Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Orange Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/teal/": {
+    "search": "Panini Prizm WNBA Teal Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Teal Prizms Caitlin Clark",
+      "Panini Prizm WNBA Teal Prizms Angel Reese",
+      "Panini Prizm WNBA Teal Prizms A'ja Wilson",
+      "Panini Prizm WNBA Teal Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Teal Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/red-pulsar/": {
+    "search": "Panini Prizm WNBA Red Pulsar Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Red Pulsar Prizms Caitlin Clark",
+      "Panini Prizm WNBA Red Pulsar Prizms Angel Reese",
+      "Panini Prizm WNBA Red Pulsar Prizms A'ja Wilson",
+      "Panini Prizm WNBA Red Pulsar Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Red Pulsar Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/blue-pulsar/": {
+    "search": "Panini Prizm WNBA Blue Pulsar Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Blue Pulsar Prizms Caitlin Clark",
+      "Panini Prizm WNBA Blue Pulsar Prizms Angel Reese",
+      "Panini Prizm WNBA Blue Pulsar Prizms A'ja Wilson",
+      "Panini Prizm WNBA Blue Pulsar Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Blue Pulsar Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/pink-pulsar/": {
+    "search": "Panini Prizm WNBA Pink Pulsar Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Pink Pulsar Prizms Caitlin Clark",
+      "Panini Prizm WNBA Pink Pulsar Prizms Angel Reese",
+      "Panini Prizm WNBA Pink Pulsar Prizms A'ja Wilson",
+      "Panini Prizm WNBA Pink Pulsar Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Pink Pulsar Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/orange-pulsar/": {
+    "search": "Panini Prizm WNBA Orange Pulsar Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Orange Pulsar Prizms Caitlin Clark",
+      "Panini Prizm WNBA Orange Pulsar Prizms Angel Reese",
+      "Panini Prizm WNBA Orange Pulsar Prizms A'ja Wilson",
+      "Panini Prizm WNBA Orange Pulsar Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Orange Pulsar Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/green-pulsar/": {
+    "search": "Panini Prizm WNBA Green Pulsar Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Green Pulsar Prizms Caitlin Clark",
+      "Panini Prizm WNBA Green Pulsar Prizms Angel Reese",
+      "Panini Prizm WNBA Green Pulsar Prizms A'ja Wilson",
+      "Panini Prizm WNBA Green Pulsar Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Green Pulsar Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/purple-pulsar/": {
+    "search": "Panini Prizm WNBA Purple Pulsar Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Purple Pulsar Prizms Caitlin Clark",
+      "Panini Prizm WNBA Purple Pulsar Prizms Angel Reese",
+      "Panini Prizm WNBA Purple Pulsar Prizms A'ja Wilson",
+      "Panini Prizm WNBA Purple Pulsar Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Purple Pulsar Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/mojo/": {
+    "search": "Panini Prizm WNBA Mojo Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Mojo Prizms Caitlin Clark",
+      "Panini Prizm WNBA Mojo Prizms Angel Reese",
+      "Panini Prizm WNBA Mojo Prizms A'ja Wilson",
+      "Panini Prizm WNBA Mojo Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Mojo Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/gold/": {
+    "search": "Panini Prizm WNBA Gold Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Gold Prizms Caitlin Clark",
+      "Panini Prizm WNBA Gold Prizms Angel Reese",
+      "Panini Prizm WNBA Gold Prizms A'ja Wilson",
+      "Panini Prizm WNBA Gold Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Gold Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/black-finite/": {
+    "search": "Panini Prizm WNBA Black Finite Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Black Finite Prizms Caitlin Clark",
+      "Panini Prizm WNBA Black Finite Prizms Angel Reese",
+      "Panini Prizm WNBA Black Finite Prizms A'ja Wilson",
+      "Panini Prizm WNBA Black Finite Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Black Finite Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/gold-vinyl/": {
+    "search": "Panini Prizm WNBA Gold Vinyl Prizms card",
+    "extra_searches": [
+      "Panini Prizm WNBA Gold Vinyl Prizms Caitlin Clark",
+      "Panini Prizm WNBA Gold Vinyl Prizms Angel Reese",
+      "Panini Prizm WNBA Gold Vinyl Prizms A'ja Wilson",
+      "Panini Prizm WNBA Gold Vinyl Prizms Sabrina Ionescu",
+      "Panini Prizm WNBA Gold Vinyl Prizms Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-wnba/signatures/": {
+    "search": "Panini Prizm WNBA Signatures card",
+    "extra_searches": [
+      "Panini Prizm WNBA Signatures Caitlin Clark",
+      "Panini Prizm WNBA Signatures Angel Reese",
+      "Panini Prizm WNBA Signatures A'ja Wilson",
+      "Panini Prizm WNBA Signatures Sabrina Ionescu",
+      "Panini Prizm WNBA Signatures Breanna Stewart"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/green/": {
+    "search": "Panini Prizm Monopoly WNBA Green Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Green Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Green Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Green Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Green Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Green Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/donut/": {
+    "search": "Panini Prizm Monopoly WNBA Donut Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Donut Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Donut Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Donut Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Donut Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Donut Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/blue-cracked-ice/": {
+    "search": "Panini Prizm Monopoly WNBA Blue Cracked Ice Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Blue Cracked Ice Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Blue Cracked Ice Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Blue Cracked Ice Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Blue Cracked Ice Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Blue Cracked Ice Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/red-cracked-ice/": {
+    "search": "Panini Prizm Monopoly WNBA Red Cracked Ice Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Red Cracked Ice Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Red Cracked Ice Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Red Cracked Ice Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Red Cracked Ice Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Red Cracked Ice Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/purple-cracked-ice/": {
+    "search": "Panini Prizm Monopoly WNBA Purple Cracked Ice Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Purple Cracked Ice Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Purple Cracked Ice Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Purple Cracked Ice Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Purple Cracked Ice Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Purple Cracked Ice Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/red/": {
+    "search": "Panini Prizm Monopoly WNBA Red Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Red Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Red Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Red Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Red Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Red Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/blue/": {
+    "search": "Panini Prizm Monopoly WNBA Blue Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Blue Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Blue Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Blue Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Blue Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Blue Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/purple/": {
+    "search": "Panini Prizm Monopoly WNBA Purple Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Purple Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Purple Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Purple Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Purple Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Purple Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/orange/": {
+    "search": "Panini Prizm Monopoly WNBA Orange Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Orange Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Orange Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Orange Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Orange Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Orange Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/mojo/": {
+    "search": "Panini Prizm Monopoly WNBA Mojo Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Mojo Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Mojo Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Mojo Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Mojo Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Mojo Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/gold/": {
+    "search": "Panini Prizm Monopoly WNBA Gold Prizms card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Gold Prizms Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Gold Prizms Angel Reese",
+      "Panini Prizm Monopoly WNBA Gold Prizms A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Gold Prizms Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Gold Prizms Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/go/": {
+    "search": "Panini Prizm Monopoly WNBA Go card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Go Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Go Angel Reese",
+      "Panini Prizm Monopoly WNBA Go A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Go Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Go Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/free-parking/": {
+    "search": "Panini Prizm Monopoly WNBA Free Parking card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Free Parking Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Free Parking Angel Reese",
+      "Panini Prizm Monopoly WNBA Free Parking A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Free Parking Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Free Parking Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/deal/": {
+    "search": "Panini Prizm Monopoly WNBA Deal card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Deal Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Deal Angel Reese",
+      "Panini Prizm Monopoly WNBA Deal A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Deal Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Deal Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/dice/": {
+    "search": "Panini Prizm Monopoly WNBA Dice card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Dice Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Dice Angel Reese",
+      "Panini Prizm Monopoly WNBA Dice A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Dice Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Dice Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/question-mark/": {
+    "search": "Panini Prizm Monopoly WNBA Question Mark card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Question Mark Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Question Mark Angel Reese",
+      "Panini Prizm Monopoly WNBA Question Mark A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Question Mark Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Question Mark Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/monopoly-man-black-white/": {
+    "search": "Panini Prizm Monopoly WNBA Monopoly Man Black White card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Monopoly Man Black White Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Monopoly Man Black White Angel Reese",
+      "Panini Prizm Monopoly WNBA Monopoly Man Black White A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Monopoly Man Black White Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Monopoly Man Black White Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/prizm-monopoly/classic-icons-red/": {
+    "search": "Panini Prizm Monopoly WNBA Classic Icons Red card",
+    "extra_searches": [
+      "Panini Prizm Monopoly WNBA Classic Icons Red Caitlin Clark",
+      "Panini Prizm Monopoly WNBA Classic Icons Red Angel Reese",
+      "Panini Prizm Monopoly WNBA Classic Icons Red A'ja Wilson",
+      "Panini Prizm Monopoly WNBA Classic Icons Red Sabrina Ionescu",
+      "Panini Prizm Monopoly WNBA Classic Icons Red Kelsey Plum"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/astro/": {
+    "search": "Panini Revolution WNBA Astro card",
+    "extra_searches": [
+      "Panini Revolution WNBA Astro Sabrina Ionescu",
+      "Panini Revolution WNBA Astro A'ja Wilson",
+      "Panini Revolution WNBA Astro Breanna Stewart",
+      "Panini Revolution WNBA Astro Diana Taurasi",
+      "Panini Revolution WNBA Astro Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/cosmic/": {
+    "search": "Panini Revolution WNBA Cosmic card",
+    "extra_searches": [
+      "Panini Revolution WNBA Cosmic Sabrina Ionescu",
+      "Panini Revolution WNBA Cosmic A'ja Wilson",
+      "Panini Revolution WNBA Cosmic Breanna Stewart",
+      "Panini Revolution WNBA Cosmic Diana Taurasi",
+      "Panini Revolution WNBA Cosmic Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/cubic/": {
+    "search": "Panini Revolution WNBA Cubic card",
+    "extra_searches": [
+      "Panini Revolution WNBA Cubic Sabrina Ionescu",
+      "Panini Revolution WNBA Cubic A'ja Wilson",
+      "Panini Revolution WNBA Cubic Breanna Stewart",
+      "Panini Revolution WNBA Cubic Diana Taurasi",
+      "Panini Revolution WNBA Cubic Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/fractal/": {
+    "search": "Panini Revolution WNBA Fractal card",
+    "extra_searches": [
+      "Panini Revolution WNBA Fractal Sabrina Ionescu",
+      "Panini Revolution WNBA Fractal A'ja Wilson",
+      "Panini Revolution WNBA Fractal Breanna Stewart",
+      "Panini Revolution WNBA Fractal Diana Taurasi",
+      "Panini Revolution WNBA Fractal Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/galactic/": {
+    "search": "Panini Revolution WNBA Galactic card",
+    "extra_searches": [
+      "Panini Revolution WNBA Galactic Sabrina Ionescu",
+      "Panini Revolution WNBA Galactic A'ja Wilson",
+      "Panini Revolution WNBA Galactic Breanna Stewart",
+      "Panini Revolution WNBA Galactic Diana Taurasi",
+      "Panini Revolution WNBA Galactic Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/groove/": {
+    "search": "Panini Revolution WNBA Groove card",
+    "extra_searches": [
+      "Panini Revolution WNBA Groove Sabrina Ionescu",
+      "Panini Revolution WNBA Groove A'ja Wilson",
+      "Panini Revolution WNBA Groove Breanna Stewart",
+      "Panini Revolution WNBA Groove Diana Taurasi",
+      "Panini Revolution WNBA Groove Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/impact/": {
+    "search": "Panini Revolution WNBA Impact card",
+    "extra_searches": [
+      "Panini Revolution WNBA Impact Sabrina Ionescu",
+      "Panini Revolution WNBA Impact A'ja Wilson",
+      "Panini Revolution WNBA Impact Breanna Stewart",
+      "Panini Revolution WNBA Impact Diana Taurasi",
+      "Panini Revolution WNBA Impact Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/revolution/lava/": {
+    "search": "Panini Revolution WNBA Lava card",
+    "extra_searches": [
+      "Panini Revolution WNBA Lava Sabrina Ionescu",
+      "Panini Revolution WNBA Lava A'ja Wilson",
+      "Panini Revolution WNBA Lava Breanna Stewart",
+      "Panini Revolution WNBA Lava Diana Taurasi",
+      "Panini Revolution WNBA Lava Candace Parker"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/press-proof-red/": {
+    "search": "Donruss WNBA Press Proof Red card",
+    "extra_searches": [
+      "Donruss WNBA Press Proof Red Caitlin Clark",
+      "Donruss WNBA Press Proof Red Angel Reese",
+      "Donruss WNBA Press Proof Red A'ja Wilson",
+      "Donruss WNBA Press Proof Red Sabrina Ionescu",
+      "Donruss WNBA Press Proof Red Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/press-proof-blue/": {
+    "search": "Donruss WNBA Press Proof Blue card",
+    "extra_searches": [
+      "Donruss WNBA Press Proof Blue Caitlin Clark",
+      "Donruss WNBA Press Proof Blue Angel Reese",
+      "Donruss WNBA Press Proof Blue A'ja Wilson",
+      "Donruss WNBA Press Proof Blue Sabrina Ionescu",
+      "Donruss WNBA Press Proof Blue Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/press-proof-purple/": {
+    "search": "Donruss WNBA Press Proof Purple card",
+    "extra_searches": [
+      "Donruss WNBA Press Proof Purple Caitlin Clark",
+      "Donruss WNBA Press Proof Purple Angel Reese",
+      "Donruss WNBA Press Proof Purple A'ja Wilson",
+      "Donruss WNBA Press Proof Purple Sabrina Ionescu",
+      "Donruss WNBA Press Proof Purple Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/holo-pink/": {
+    "search": "Donruss WNBA Holo Pink card",
+    "extra_searches": [
+      "Donruss WNBA Holo Pink Caitlin Clark",
+      "Donruss WNBA Holo Pink Angel Reese",
+      "Donruss WNBA Holo Pink A'ja Wilson",
+      "Donruss WNBA Holo Pink Sabrina Ionescu",
+      "Donruss WNBA Holo Pink Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/holo-green/": {
+    "search": "Donruss WNBA Holo Green card",
+    "extra_searches": [
+      "Donruss WNBA Holo Green Caitlin Clark",
+      "Donruss WNBA Holo Green Angel Reese",
+      "Donruss WNBA Holo Green A'ja Wilson",
+      "Donruss WNBA Holo Green Sabrina Ionescu",
+      "Donruss WNBA Holo Green Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/holo-orange/": {
+    "search": "Donruss WNBA Holo Orange card",
+    "extra_searches": [
+      "Donruss WNBA Holo Orange Caitlin Clark",
+      "Donruss WNBA Holo Orange Angel Reese",
+      "Donruss WNBA Holo Orange A'ja Wilson",
+      "Donruss WNBA Holo Orange Sabrina Ionescu",
+      "Donruss WNBA Holo Orange Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/holo-red/": {
+    "search": "Donruss WNBA Holo Red card",
+    "extra_searches": [
+      "Donruss WNBA Holo Red Caitlin Clark",
+      "Donruss WNBA Holo Red Angel Reese",
+      "Donruss WNBA Holo Red A'ja Wilson",
+      "Donruss WNBA Holo Red Sabrina Ionescu",
+      "Donruss WNBA Holo Red Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/diamond-press-proof/": {
+    "search": "Donruss WNBA Diamond Press Proof card",
+    "extra_searches": [
+      "Donruss WNBA Diamond Press Proof Caitlin Clark",
+      "Donruss WNBA Diamond Press Proof Angel Reese",
+      "Donruss WNBA Diamond Press Proof A'ja Wilson",
+      "Donruss WNBA Diamond Press Proof Sabrina Ionescu",
+      "Donruss WNBA Diamond Press Proof Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/press-proof-black/": {
+    "search": "Donruss WNBA Press Proof Black card",
+    "extra_searches": [
+      "Donruss WNBA Press Proof Black Caitlin Clark",
+      "Donruss WNBA Press Proof Black Angel Reese",
+      "Donruss WNBA Press Proof Black A'ja Wilson",
+      "Donruss WNBA Press Proof Black Sabrina Ionescu",
+      "Donruss WNBA Press Proof Black Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/pink-laser/": {
+    "search": "Donruss WNBA Pink Laser card",
+    "extra_searches": [
+      "Donruss WNBA Pink Laser Caitlin Clark",
+      "Donruss WNBA Pink Laser Angel Reese",
+      "Donruss WNBA Pink Laser A'ja Wilson",
+      "Donruss WNBA Pink Laser Sabrina Ionescu",
+      "Donruss WNBA Pink Laser Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/green-laser/": {
+    "search": "Donruss WNBA Green Laser card",
+    "extra_searches": [
+      "Donruss WNBA Green Laser Caitlin Clark",
+      "Donruss WNBA Green Laser Angel Reese",
+      "Donruss WNBA Green Laser A'ja Wilson",
+      "Donruss WNBA Green Laser Sabrina Ionescu",
+      "Donruss WNBA Green Laser Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/cubic/": {
+    "search": "Donruss WNBA Cubic card",
+    "extra_searches": [
+      "Donruss WNBA Cubic Caitlin Clark",
+      "Donruss WNBA Cubic Angel Reese",
+      "Donruss WNBA Cubic A'ja Wilson",
+      "Donruss WNBA Cubic Sabrina Ionescu",
+      "Donruss WNBA Cubic Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/dragon/": {
+    "search": "Donruss WNBA Dragon card",
+    "extra_searches": [
+      "Donruss WNBA Dragon Caitlin Clark",
+      "Donruss WNBA Dragon Angel Reese",
+      "Donruss WNBA Dragon A'ja Wilson",
+      "Donruss WNBA Dragon Sabrina Ionescu",
+      "Donruss WNBA Dragon Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/my-house-press-proof/": {
+    "search": "Donruss WNBA My House Press Proof card",
+    "extra_searches": [
+      "Donruss WNBA My House Press Proof Caitlin Clark",
+      "Donruss WNBA My House Press Proof Angel Reese",
+      "Donruss WNBA My House Press Proof A'ja Wilson",
+      "Donruss WNBA My House Press Proof Sabrina Ionescu",
+      "Donruss WNBA My House Press Proof Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/my-house-holo/": {
+    "search": "Donruss WNBA My House Holo card",
+    "extra_searches": [
+      "Donruss WNBA My House Holo Caitlin Clark",
+      "Donruss WNBA My House Holo Angel Reese",
+      "Donruss WNBA My House Holo A'ja Wilson",
+      "Donruss WNBA My House Holo Sabrina Ionescu",
+      "Donruss WNBA My House Holo Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/my-house-pink-fireworks/": {
+    "search": "Donruss WNBA My House Pink Fireworks card",
+    "extra_searches": [
+      "Donruss WNBA My House Pink Fireworks Caitlin Clark",
+      "Donruss WNBA My House Pink Fireworks Angel Reese",
+      "Donruss WNBA My House Pink Fireworks A'ja Wilson",
+      "Donruss WNBA My House Pink Fireworks Sabrina Ionescu",
+      "Donruss WNBA My House Pink Fireworks Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/donruss/my-house-green/": {
+    "search": "Donruss WNBA My House Green card",
+    "extra_searches": [
+      "Donruss WNBA My House Green Caitlin Clark",
+      "Donruss WNBA My House Green Angel Reese",
+      "Donruss WNBA My House Green A'ja Wilson",
+      "Donruss WNBA My House Green Sabrina Ionescu",
+      "Donruss WNBA My House Green Paige Bueckers"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/blue/": {
+    "search": "Panini Origins WNBA Blue card",
+    "extra_searches": [
+      "Panini Origins WNBA Blue Caitlin Clark",
+      "Panini Origins WNBA Blue Angel Reese",
+      "Panini Origins WNBA Blue A'ja Wilson",
+      "Panini Origins WNBA Blue Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/red/": {
+    "search": "Panini Origins WNBA Red card",
+    "extra_searches": [
+      "Panini Origins WNBA Red Caitlin Clark",
+      "Panini Origins WNBA Red Angel Reese",
+      "Panini Origins WNBA Red A'ja Wilson",
+      "Panini Origins WNBA Red Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/gold/": {
+    "search": "Panini Origins WNBA Gold card",
+    "extra_searches": [
+      "Panini Origins WNBA Gold Caitlin Clark",
+      "Panini Origins WNBA Gold Angel Reese",
+      "Panini Origins WNBA Gold A'ja Wilson",
+      "Panini Origins WNBA Gold Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/black/": {
+    "search": "Panini Origins WNBA Black card",
+    "extra_searches": [
+      "Panini Origins WNBA Black Caitlin Clark",
+      "Panini Origins WNBA Black Angel Reese",
+      "Panini Origins WNBA Black A'ja Wilson",
+      "Panini Origins WNBA Black Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/drip/": {
+    "search": "Panini Origins WNBA Drip card",
+    "extra_searches": [
+      "Panini Origins WNBA Drip Caitlin Clark",
+      "Panini Origins WNBA Drip Angel Reese",
+      "Panini Origins WNBA Drip A'ja Wilson",
+      "Panini Origins WNBA Drip Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/drip-gold/": {
+    "search": "Panini Origins WNBA Drip Gold card",
+    "extra_searches": [
+      "Panini Origins WNBA Drip Gold Caitlin Clark",
+      "Panini Origins WNBA Drip Gold Angel Reese",
+      "Panini Origins WNBA Drip Gold A'ja Wilson",
+      "Panini Origins WNBA Drip Gold Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/origins/drip-teal/": {
+    "search": "Panini Origins WNBA Drip Teal card",
+    "extra_searches": [
+      "Panini Origins WNBA Drip Teal Caitlin Clark",
+      "Panini Origins WNBA Drip Teal Angel Reese",
+      "Panini Origins WNBA Drip Teal A'ja Wilson",
+      "Panini Origins WNBA Drip Teal Sabrina Ionescu"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/premier/": {
+    "search": "Panini Select WNBA Premier card",
+    "extra_searches": [
+      "Panini Select WNBA Premier Caitlin Clark",
+      "Panini Select WNBA Premier Angel Reese",
+      "Panini Select WNBA Premier A'ja Wilson",
+      "Panini Select WNBA Premier Sabrina Ionescu",
+      "Panini Select WNBA Premier Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/courtside/": {
+    "search": "Panini Select WNBA Courtside card",
+    "extra_searches": [
+      "Panini Select WNBA Courtside Caitlin Clark",
+      "Panini Select WNBA Courtside Angel Reese",
+      "Panini Select WNBA Courtside A'ja Wilson",
+      "Panini Select WNBA Courtside Sabrina Ionescu",
+      "Panini Select WNBA Courtside Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/future/": {
+    "search": "Panini Select WNBA Future card",
+    "extra_searches": [
+      "Panini Select WNBA Future Caitlin Clark",
+      "Panini Select WNBA Future Angel Reese",
+      "Panini Select WNBA Future A'ja Wilson",
+      "Panini Select WNBA Future Sabrina Ionescu",
+      "Panini Select WNBA Future Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-silver/": {
+    "search": "Panini Select WNBA Prizms Silver card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Silver Caitlin Clark",
+      "Panini Select WNBA Prizms Silver Angel Reese",
+      "Panini Select WNBA Prizms Silver A'ja Wilson",
+      "Panini Select WNBA Prizms Silver Sabrina Ionescu",
+      "Panini Select WNBA Prizms Silver Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-pink-shimmer/": {
+    "search": "Panini Select WNBA Prizms Pink Shimmer card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Pink Shimmer Caitlin Clark",
+      "Panini Select WNBA Prizms Pink Shimmer Angel Reese",
+      "Panini Select WNBA Prizms Pink Shimmer A'ja Wilson",
+      "Panini Select WNBA Prizms Pink Shimmer Sabrina Ionescu",
+      "Panini Select WNBA Prizms Pink Shimmer Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-tie-dye/": {
+    "search": "Panini Select WNBA Prizms Tie Dye card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Tie Dye Caitlin Clark",
+      "Panini Select WNBA Prizms Tie Dye Angel Reese",
+      "Panini Select WNBA Prizms Tie Dye A'ja Wilson",
+      "Panini Select WNBA Prizms Tie Dye Sabrina Ionescu",
+      "Panini Select WNBA Prizms Tie Dye Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-tiger/": {
+    "search": "Panini Select WNBA Prizms Tiger card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Tiger Caitlin Clark",
+      "Panini Select WNBA Prizms Tiger Angel Reese",
+      "Panini Select WNBA Prizms Tiger A'ja Wilson",
+      "Panini Select WNBA Prizms Tiger Sabrina Ionescu",
+      "Panini Select WNBA Prizms Tiger Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-zebra/": {
+    "search": "Panini Select WNBA Prizms Zebra card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Zebra Caitlin Clark",
+      "Panini Select WNBA Prizms Zebra Angel Reese",
+      "Panini Select WNBA Prizms Zebra A'ja Wilson",
+      "Panini Select WNBA Prizms Zebra Sabrina Ionescu",
+      "Panini Select WNBA Prizms Zebra Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-ice-gold/": {
+    "search": "Panini Select WNBA Prizms Ice Gold card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Ice Gold Caitlin Clark",
+      "Panini Select WNBA Prizms Ice Gold Angel Reese",
+      "Panini Select WNBA Prizms Ice Gold A'ja Wilson",
+      "Panini Select WNBA Prizms Ice Gold Sabrina Ionescu",
+      "Panini Select WNBA Prizms Ice Gold Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/select/prizms-bronze-checker/": {
+    "search": "Panini Select WNBA Prizms Bronze Checker card",
+    "extra_searches": [
+      "Panini Select WNBA Prizms Bronze Checker Caitlin Clark",
+      "Panini Select WNBA Prizms Bronze Checker Angel Reese",
+      "Panini Select WNBA Prizms Bronze Checker A'ja Wilson",
+      "Panini Select WNBA Prizms Bronze Checker Sabrina Ionescu",
+      "Panini Select WNBA Prizms Bronze Checker Cameron Brink"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/refractors/": {
+    "search": "Bowman University Best Refractors card",
+    "extra_searches": [
+      "Bowman University Best Refractors Caitlin Clark",
+      "Bowman University Best Refractors Paige Bueckers",
+      "Bowman University Best Refractors JuJu Watkins",
+      "Bowman University Best Refractors Hannah Hidalgo",
+      "Bowman University Best Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/mini-diamond-refractors/": {
+    "search": "Bowman University Best Mini Diamond Refractors card",
+    "extra_searches": [
+      "Bowman University Best Mini Diamond Refractors Caitlin Clark",
+      "Bowman University Best Mini Diamond Refractors Paige Bueckers",
+      "Bowman University Best Mini Diamond Refractors JuJu Watkins",
+      "Bowman University Best Mini Diamond Refractors Hannah Hidalgo",
+      "Bowman University Best Mini Diamond Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/speckle-refractors/": {
+    "search": "Bowman University Best Speckle Refractors card",
+    "extra_searches": [
+      "Bowman University Best Speckle Refractors Caitlin Clark",
+      "Bowman University Best Speckle Refractors Paige Bueckers",
+      "Bowman University Best Speckle Refractors JuJu Watkins",
+      "Bowman University Best Speckle Refractors Hannah Hidalgo",
+      "Bowman University Best Speckle Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/blue-refractors/": {
+    "search": "Bowman University Best Blue Refractors card",
+    "extra_searches": [
+      "Bowman University Best Blue Refractors Caitlin Clark",
+      "Bowman University Best Blue Refractors Paige Bueckers",
+      "Bowman University Best Blue Refractors JuJu Watkins",
+      "Bowman University Best Blue Refractors Hannah Hidalgo",
+      "Bowman University Best Blue Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/gold-refractors/": {
+    "search": "Bowman University Best Gold Refractors card",
+    "extra_searches": [
+      "Bowman University Best Gold Refractors Caitlin Clark",
+      "Bowman University Best Gold Refractors Paige Bueckers",
+      "Bowman University Best Gold Refractors JuJu Watkins",
+      "Bowman University Best Gold Refractors Hannah Hidalgo",
+      "Bowman University Best Gold Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/green-refractors/": {
+    "search": "Bowman University Best Green Refractors card",
+    "extra_searches": [
+      "Bowman University Best Green Refractors Caitlin Clark",
+      "Bowman University Best Green Refractors Paige Bueckers",
+      "Bowman University Best Green Refractors JuJu Watkins",
+      "Bowman University Best Green Refractors Hannah Hidalgo",
+      "Bowman University Best Green Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-best/orange-refractors/": {
+    "search": "Bowman University Best Orange Refractors card",
+    "extra_searches": [
+      "Bowman University Best Orange Refractors Caitlin Clark",
+      "Bowman University Best Orange Refractors Paige Bueckers",
+      "Bowman University Best Orange Refractors JuJu Watkins",
+      "Bowman University Best Orange Refractors Hannah Hidalgo",
+      "Bowman University Best Orange Refractors Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-chrome/pink-refractor/": {
+    "search": "Bowman University Chrome Pink Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Pink Refractor Caitlin Clark",
+      "Bowman University Chrome Pink Refractor Paige Bueckers",
+      "Bowman University Chrome Pink Refractor JuJu Watkins",
+      "Bowman University Chrome Pink Refractor Hannah Hidalgo",
+      "Bowman University Chrome Pink Refractor Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-chrome/pink-wave-refractor/": {
+    "search": "Bowman University Chrome Pink Wave Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Pink Wave Refractor Caitlin Clark",
+      "Bowman University Chrome Pink Wave Refractor Paige Bueckers",
+      "Bowman University Chrome Pink Wave Refractor JuJu Watkins",
+      "Bowman University Chrome Pink Wave Refractor Hannah Hidalgo",
+      "Bowman University Chrome Pink Wave Refractor Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-chrome/orange-refractor/": {
+    "search": "Bowman University Chrome Orange Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Orange Refractor Caitlin Clark",
+      "Bowman University Chrome Orange Refractor Paige Bueckers",
+      "Bowman University Chrome Orange Refractor JuJu Watkins",
+      "Bowman University Chrome Orange Refractor Hannah Hidalgo",
+      "Bowman University Chrome Orange Refractor Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-chrome/green-refractor/": {
+    "search": "Bowman University Chrome Green Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Green Refractor Caitlin Clark",
+      "Bowman University Chrome Green Refractor Paige Bueckers",
+      "Bowman University Chrome Green Refractor JuJu Watkins",
+      "Bowman University Chrome Green Refractor Hannah Hidalgo",
+      "Bowman University Chrome Green Refractor Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-chrome/blue-refractor/": {
+    "search": "Bowman University Chrome Blue Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Blue Refractor Caitlin Clark",
+      "Bowman University Chrome Blue Refractor Paige Bueckers",
+      "Bowman University Chrome Blue Refractor JuJu Watkins",
+      "Bowman University Chrome Blue Refractor Hannah Hidalgo",
+      "Bowman University Chrome Blue Refractor Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
+  },
+  "parallels/bowman-u-chrome/ray-wave-refractor/": {
+    "search": "Bowman University Chrome Ray Wave Refractor card",
+    "extra_searches": [
+      "Bowman University Chrome Ray Wave Refractor Caitlin Clark",
+      "Bowman University Chrome Ray Wave Refractor Paige Bueckers",
+      "Bowman University Chrome Ray Wave Refractor JuJu Watkins",
+      "Bowman University Chrome Ray Wave Refractor Hannah Hidalgo",
+      "Bowman University Chrome Ray Wave Refractor Kiki Rice"
+    ],
+    "min_candidates": 4,
+    "max_candidates": 12
   }
 }
