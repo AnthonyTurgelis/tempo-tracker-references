@@ -1,7 +1,26 @@
 #!/usr/bin/env python3
 """
-Reference library downloader v4 — uses the `ddgs` library.
-Research findings: see SCRAPING_NOTES.md
+Reference library downloader v5 — multiple candidates per entry.
+
+Each manifest entry now writes to a FOLDER, not a single file. The folder
+contains up to N candidate images so we can cross-reference against actual
+card photos.
+
+Folder structure:
+  base-photos/<player>/<year>-<product>-<card#>/candidate-001.jpg ... candidate-010.jpg
+  parallels/<product>/<variant>/candidate-001.jpg ... candidate-015.jpg
+
+Manifest entry format (NEW):
+  "<folder-path>/": {
+    "search": "main query",
+    "extra_searches": ["alt query 1", "alt query 2"],   // optional
+    "min_candidates": 5,
+    "max_candidates": 15
+  }
+
+For parallels especially, multiple search queries are run with DIFFERENT
+players to populate the same folder with diverse examples of the same
+parallel. This lets us compare textures across cards.
 """
 import argparse, io, json, os, random, re, sys, time
 from pathlib import Path
@@ -20,7 +39,7 @@ try:
     HAS_DDGS = True
 except ImportError:
     HAS_DDGS = False
-    print("WARNING: ddgs not installed; only Bing async will be used.", file=sys.stderr)
+    print("WARNING: ddgs not installed.", file=sys.stderr)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_PATH = REPO_ROOT / "references-manifest.json"
@@ -35,20 +54,18 @@ def headers():
     return {"User-Agent": random.choice(UAS), "Accept": "text/html,image/*,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.9"}
 
 TIMEOUT = 25
-SLEEP = 0.5
+DEFAULT_MIN_CANDIDATES = 3
+DEFAULT_MAX_CANDIDATES = 10
 
-def fetch(url, retries=2):
+def fetch(url, retries=1):
     for i in range(retries + 1):
         try:
             r = requests.get(url, headers=headers(), timeout=TIMEOUT, allow_redirects=True)
             if r.status_code == 200:
                 return r
-            if i == retries:
-                print(f"     ! status={r.status_code} {url[:80]}")
-        except requests.RequestException as e:
-            if i == retries:
-                print(f"     ! {type(e).__name__}")
-        time.sleep(1.5 * (i + 1))
+        except requests.RequestException:
+            pass
+        time.sleep(1.0 * (i + 1))
     return None
 
 def validate(content):
@@ -81,7 +98,7 @@ def download_and_score(url):
     ok, score, reason = validate(r.content)
     return (r.content if ok else None, score, reason)
 
-def search_via_ddgs(query, max_results=15):
+def search_via_ddgs(query, max_results=20):
     if not HAS_DDGS:
         return []
     try:
@@ -92,15 +109,14 @@ def search_via_ddgs(query, max_results=15):
         print(f"     ! ddgs error: {type(e).__name__}: {str(e)[:80]}")
         return []
 
-def search_bing_async(query, max_results=15):
+def search_bing_async(query, max_results=20):
     url = f"https://www.bing.com/images/async?q={quote_plus(query)}&first=1&mmasync=1"
     r = fetch(url)
     if not r:
         return []
     try:
         soup = BeautifulSoup(r.text, "html.parser")
-    except Exception as e:
-        print(f"     ! bs4 fail: {e}")
+    except Exception:
         return []
     urls = []
     for a in soup.find_all("a"):
@@ -118,52 +134,79 @@ def search_bing_async(query, max_results=15):
             continue
     return urls
 
-def resolve(spec):
-    candidates = []
+def deduplicate(content_list):
+    """Hash-based dedup of byte content."""
+    import hashlib
+    seen = set()
+    out = []
+    for c in content_list:
+        h = hashlib.md5(c).hexdigest()
+        if h not in seen:
+            seen.add(h)
+            out.append(c)
+    return out
+
+def resolve_to_folder(folder_path, spec):
+    """Save up to max_candidates valid card images into folder_path. Returns count saved."""
+    folder = REPO_ROOT / folder_path
+    folder.mkdir(parents=True, exist_ok=True)
+
+    min_c = spec.get("min_candidates", DEFAULT_MIN_CANDIDATES)
+    max_c = spec.get("max_candidates", DEFAULT_MAX_CANDIDATES)
+    score_threshold = spec.get("min_score", 100)
+
+    queries = []
+    if spec.get("search"):
+        queries.append(spec["search"])
+    queries.extend(spec.get("extra_searches", []))
+    if not queries:
+        return 0
+
     explicit_urls = []
     if spec.get("url") and not spec["url"].startswith("REPLACE"):
         explicit_urls.append(spec["url"])
     explicit_urls.extend(spec.get("alt_urls", []))
-    for url in explicit_urls:
-        content, score, reason = download_and_score(url)
-        if content:
-            print(f"     ✓ explicit: {reason}")
-            candidates.append((content, score + 30, "explicit"))
-        else:
-            print(f"     ✗ explicit: {reason}")
 
-    query = spec.get("search")
-    have_great_match = lambda: candidates and max(c[1] for c in candidates) >= 110
-    if query and not have_great_match():
+    saved_contents = []
+    candidate_urls = list(explicit_urls)
+
+    # Run each search query and collect URLs
+    for q in queries:
+        if len(saved_contents) >= max_c:
+            break
         for engine_name, search_fn in [("ddgs", search_via_ddgs), ("bing-async", search_bing_async)]:
-            if have_great_match():
-                break
-            print(f"     ▸ {engine_name}: {query}")
-            try:
-                urls = search_fn(query, max_results=10)
-            except Exception as e:
-                print(f"     ! {engine_name} crashed: {e}")
-                urls = []
+            print(f"     ▸ {engine_name}: {q}")
+            urls = search_fn(q, max_results=15)
             print(f"     ▸ {engine_name} returned {len(urls)} urls")
-            tried = 0
-            for u in urls:
-                if tried >= 6:
-                    break
-                tried += 1
-                time.sleep(0.3)
-                content, score, reason = download_and_score(u)
-                if content:
-                    print(f"     ✓ {engine_name} #{tried}: {reason}")
-                    candidates.append((content, score, engine_name))
-                    if score >= 110:
-                        break
+            candidate_urls.extend(urls)
+            # If ddgs gave us plenty, skip bing-async for this query
+            if engine_name == "ddgs" and len(urls) >= 10:
+                break
 
-    if not candidates:
-        return None
-    candidates.sort(key=lambda c: -c[1])
-    best = candidates[0]
-    print(f"     ★ best: score={best[1]} from {best[2]} ({len(candidates)} candidates total)")
-    return best[0]
+    # Try each URL, keeping ones that score above threshold
+    seen_urls = set()
+    for url in candidate_urls:
+        if len(saved_contents) >= max_c:
+            break
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+        time.sleep(0.2)
+        content, score, reason = download_and_score(url)
+        if content and score >= score_threshold:
+            saved_contents.append(content)
+            print(f"     ✓ #{len(saved_contents)}: {reason}")
+
+    # Dedup by content hash (image search engines often return same image multiple times)
+    saved_contents = deduplicate(saved_contents)
+
+    # Write to disk
+    for i, content in enumerate(saved_contents, 1):
+        target = folder / f"candidate-{i:03d}.jpg"
+        target.write_bytes(content)
+
+    print(f"     ★ saved {len(saved_contents)} unique candidates to {folder_path}")
+    return len(saved_contents)
 
 def main():
     ap = argparse.ArgumentParser()
@@ -177,7 +220,7 @@ def main():
 
     manifest = json.loads(MANIFEST_PATH.read_text())
     entries = {k: v for k, v in manifest.items() if not k.startswith("_") and isinstance(v, dict)}
-    print(f"v4 downloader · {len(entries)} entries · mode={args.mode} · ddgs={HAS_DDGS}\n")
+    print(f"v5 downloader · {len(entries)} entries · mode={args.mode} · ddgs={HAS_DDGS}\n")
 
     new, skipped, failed = 0, 0, []
     proc = 0
@@ -185,24 +228,26 @@ def main():
         if args.limit and proc >= args.limit:
             print(f"\n[limit reached]")
             break
-        full = REPO_ROOT / path
-        if args.mode == "fill-missing" and full.exists():
-            skipped += 1
-            continue
+        # Each entry maps to a folder
+        folder_path = path.rstrip("/")
+        full_folder = REPO_ROOT / folder_path
+        # Skip if folder exists and has at least min_candidates
+        min_c = spec.get("min_candidates", DEFAULT_MIN_CANDIDATES)
+        if args.mode == "fill-missing" and full_folder.exists():
+            existing = len(list(full_folder.glob("candidate-*.jpg")))
+            if existing >= min_c:
+                skipped += 1
+                continue
         proc += 1
-        print(f"\n→ [{proc}] {path}")
-        full.parent.mkdir(parents=True, exist_ok=True)
-        content = resolve(spec)
-        if content:
-            full.write_bytes(content)
-            print(f"   ✓ saved {len(content)}b")
+        print(f"\n→ [{proc}] {folder_path}/")
+        count = resolve_to_folder(folder_path, spec)
+        if count > 0:
             new += 1
         else:
-            failed.append(path)
-            print(f"   ✗ all sources failed")
-        time.sleep(SLEEP)
+            failed.append(folder_path)
+            print(f"   ✗ no candidates saved")
 
-    print(f"\n{'='*60}\nSummary: {new} new · {skipped} existed · {len(failed)} failed")
+    print(f"\n{'='*60}\nSummary: {new} folders populated · {skipped} already existed · {len(failed)} failed")
     if failed:
         print(f"\nFAILED ({len(failed)}):")
         for f in failed:
