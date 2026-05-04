@@ -34,6 +34,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install requests pillow beautifulsoup4 ddgs
 
+      - name: Clean up old single-file v4 references
+        run: |
+          # v4 wrote single .jpg files; v5 needs folders with the same names.
+          # Remove all existing .jpg files in base-photos/ and parallels/ so v5 can create folders.
+          find base-photos -maxdepth 3 -name "*.jpg" -type f -delete 2>/dev/null || true
+          find parallels -maxdepth 3 -name "*.jpg" -type f -delete 2>/dev/null || true
+          echo "Cleanup complete"
+
       - name: Run downloader
         env:
           MODE: ${{ github.event.inputs.mode || 'fill-missing' }}
@@ -43,7 +51,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add base-photos/ parallels/ || true
+          git add -A base-photos/ parallels/ || true
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update reference library [skip ci]"
             git push
