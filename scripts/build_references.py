@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 """
-Reference library downloader v2 — aggressive multi-source scraper.
+Reference library downloader v3 — multi-source, GHA-friendly.
 
-For each manifest entry, tries (in order):
-  1. Explicit `url` if present
-  2. Explicit `alt_urls` fallbacks
-  3. eBay product page lookup for the search query
-  4. eBay listing search → scrape stock photo
-  5. SportsCardsPro page lookup
-  6. SportsCardInvestor page lookup
+eBay blocks GitHub Actions IP ranges with 403s. This version uses image search
+engines as the primary source, which work fine from GHA:
+  1. Explicit url / alt_urls
+  2. Bing Image Search (HTML scraping, very reliable)
+  3. DuckDuckGo Image Search (JSON API, no key needed)
 
-For each candidate URL found, downloads the image, validates it
-(aspect ratio close to a card, minimum size, not a banner/ad), and
-keeps the best-scoring one.
-
-Logs each step verbosely so the GHA action output shows exactly what
-happened for each entry.
+For each candidate URL, downloads, validates with PIL (size, aspect ratio),
+and keeps the best-scoring image.
 """
-import argparse, io, json, os, re, sys, time
+import argparse, io, json, os, random, re, sys, time
 from pathlib import Path
 from urllib.parse import quote_plus
 
@@ -31,224 +25,192 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_PATH = REPO_ROOT / "references-manifest.json"
 
-UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
-HEADERS = {
-    "User-Agent": UA,
-    "Accept": "text/html,application/xhtml+xml,image/webp,image/jpeg,image/png,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive",
-}
-TIMEOUT = 25
-SLEEP_BETWEEN_REQUESTS = 0.5
+UAS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+]
 
-# ---------- HTTP ----------
+def headers():
+    return {
+        "User-Agent": random.choice(UAS),
+        "Accept": "text/html,application/xhtml+xml,image/webp,image/jpeg,image/png,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+
+TIMEOUT = 25
+SLEEP = 0.6
+
 def fetch(url, retries=2):
-    for attempt in range(retries + 1):
+    for i in range(retries + 1):
         try:
-            r = requests.get(url, headers=HEADERS, timeout=TIMEOUT, allow_redirects=True)
+            r = requests.get(url, headers=headers(), timeout=TIMEOUT, allow_redirects=True)
             if r.status_code == 200:
                 return r
-            if attempt == retries:
+            if i == retries:
                 print(f"     ! status={r.status_code} for {url[:90]}")
         except requests.RequestException as e:
-            if attempt == retries:
-                print(f"     ! {type(e).__name__}: {url[:90]}")
-        time.sleep(1.5 * (attempt + 1))
+            if i == retries:
+                print(f"     ! {type(e).__name__}")
+        time.sleep(1.5 * (i + 1))
     return None
 
-# ---------- Image validation ----------
-def validate_image(content):
-    """Return (ok, score, reason). Score higher = better. Card-like images score high."""
-    if not content or len(content) < 1000:
-        return (False, 0, "too small (<1KB)")
-    if not (content[:3] == b"\xff\xd8\xff" or content[:8] == b"\x89PNG\r\n\x1a\n" or content[:4] == b"RIFF" or content[:3] == b"GIF"):
-        return (False, 0, "not jpeg/png/webp/gif")
+def validate(content):
+    if not content or len(content) < 1500:
+        return (False, 0, "too small")
+    head = content[:8]
+    if not (head[:3] == b"\xff\xd8\xff" or head == b"\x89PNG\r\n\x1a\n" or head[:4] == b"RIFF" or head[:3] == b"GIF"):
+        return (False, 0, "not image")
     try:
         img = Image.open(io.BytesIO(content))
         w, h = img.size
     except Exception as e:
-        return (False, 0, f"PIL open failed: {e}")
+        return (False, 0, f"PIL fail: {e}")
     if w < 200 or h < 200:
-        return (False, 0, f"too small ({w}x{h})")
+        return (False, 0, f"too small {w}x{h}")
     aspect = w / h
-    # Trading cards are ~2.5:3.5 = 0.71. Allow some flex for slabbed cards or rotated.
-    # Score peaks around aspect 0.6-0.85 (vertical card)
     if 0.55 <= aspect <= 0.95:
-        aspect_score = 100 - abs(aspect - 0.71) * 100
+        s = 100 - abs(aspect - 0.71) * 100
     elif 1.05 <= aspect <= 1.8:
-        # Horizontal card or back-of-card
-        aspect_score = 50 - abs(aspect - 1.4) * 30
+        s = 50 - abs(aspect - 1.4) * 30
     else:
-        # Likely banner/landscape ad or square thumbnail
-        aspect_score = 10
-    size_score = min(50, (w * h) / 10000)  # bigger is better up to a cap
-    score = aspect_score + size_score
-    return (True, int(score), f"{w}x{h} aspect={aspect:.2f} score={int(score)}")
+        s = 5
+    s += min(40, (w * h) / 12000)
+    return (True, int(s), f"{w}x{h} ar={aspect:.2f} s={int(s)}")
 
-def download_and_score(url):
-    """Download URL, return (content, score, reason). Score 0 if invalid."""
+def download(url):
     r = fetch(url)
     if not r:
-        return (None, 0, "fetch failed")
-    ok, score, reason = validate_image(r.content)
-    if not ok:
-        return (None, 0, reason)
-    return (r.content, score, reason)
+        return (None, 0, "fetch fail")
+    ok, score, reason = validate(r.content)
+    return (r.content if ok else None, score, reason)
 
-# ---------- eBay scrapers ----------
-def upgrade_ebay_image_url(url):
-    """Bump any s-l<NUM>.jpg/webp to s-l1600.jpg for max resolution."""
-    return re.sub(r"/s-l\d+\.(jpg|webp|png)", "/s-l1600.jpg", url)
-
-def extract_ebay_image_urls(html):
-    """Find all i.ebayimg.com URLs, dedup, upgrade to s-l1600. Returns ordered list (page order)."""
-    raw = re.findall(r'https://i\.ebayimg\.com/images/g/[^/"\s]+/s-l\d+\.(?:jpg|webp|png)', html)
-    seen = set()
-    upgraded = []
-    for u in raw:
-        u2 = upgrade_ebay_image_url(u)
-        if u2 not in seen:
-            seen.add(u2)
-            upgraded.append(u2)
-    return upgraded
-
-def search_ebay_product_pages(query, max_pages=3):
-    """Search eBay, follow up to max_pages product pages, return image URL list."""
-    print(f"     ▸ ebay search: {query}")
-    search_url = f"https://www.ebay.com/sch/i.html?_nkw={quote_plus(query)}&_sacat=212"
-    r = fetch(search_url)
+def bing_image_search(query, max_urls=10):
+    url = f"https://www.bing.com/images/search?q={quote_plus(query)}&first=1&form=HDRSC2"
+    r = fetch(url)
     if not r:
         return []
-    # Find product page links (/p/<id>) and item links (/itm/<id>)
-    product_links = re.findall(r'href="(https://www\.ebay\.com/p/\d+[^"#]*)"', r.text)
-    item_links = re.findall(r'href="(https://www\.ebay\.com/itm/\d+[^"#]*)"', r.text)
-    # Dedup, prefer product pages
-    candidates = []
+    urls = re.findall(r'"murl":"([^"]+)"', r.text)
+    urls = [u.replace("\\u002f", "/").replace("\\/", "/") for u in urls]
     seen = set()
-    for u in product_links + item_links:
-        base = u.split("?")[0]
-        if base not in seen:
-            seen.add(base)
-            candidates.append(base)
-        if len(candidates) >= max_pages:
-            break
-    print(f"     ▸ found {len(candidates)} pages to inspect")
-    all_images = []
-    for page_url in candidates:
-        time.sleep(SLEEP_BETWEEN_REQUESTS)
-        r2 = fetch(page_url)
-        if not r2:
+    out = []
+    for u in urls:
+        if u in seen:
             continue
-        imgs = extract_ebay_image_urls(r2.text)
-        if imgs:
-            print(f"       · {len(imgs)} candidate images from {page_url[:60]}…")
-            all_images.extend(imgs)
-    # Dedup across pages
-    seen = set()
-    unique = []
-    for u in all_images:
-        if u not in seen:
-            seen.add(u)
-            unique.append(u)
-    return unique
+        seen.add(u)
+        out.append(u)
+        if len(out) >= max_urls:
+            break
+    return out
 
-# ---------- Resolver ----------
-def resolve(spec, target_path):
-    """Try every source. Return best image bytes."""
-    candidates = []  # list of (content, score, source)
+def ddg_image_search(query, max_urls=10):
+    s = requests.Session()
+    s.headers.update(headers())
+    try:
+        r = s.get("https://duckduckgo.com/", params={"q": query}, timeout=TIMEOUT)
+        m = re.search(r'vqd=["\']([\d-]+)["\']', r.text) or re.search(r'vqd=([\d-]+)&', r.text)
+        if not m:
+            return []
+        vqd = m.group(1)
+        time.sleep(0.5)
+        r2 = s.get("https://duckduckgo.com/i.js", params={
+            "l": "us-en", "o": "json", "q": query, "vqd": vqd, "f": ",,,,,", "p": "1"
+        }, timeout=TIMEOUT)
+        if r2.status_code != 200:
+            return []
+        data = r2.json()
+        return [item.get("image") for item in data.get("results", []) if item.get("image")][:max_urls]
+    except Exception as e:
+        print(f"     ! ddg: {e}")
+        return []
 
-    # 1. Explicit URLs
-    for url in [spec.get("url")] + spec.get("alt_urls", []):
-        if url and not url.startswith("REPLACE"):
-            content, score, reason = download_and_score(url)
-            if content:
-                print(f"     ✓ explicit url: {reason}")
-                candidates.append((content, score + 30, "explicit_url"))  # bonus
-            else:
-                print(f"     ✗ explicit url failed: {reason}")
+def resolve(spec):
+    candidates = []
+    urls = []
+    if spec.get("url") and not spec["url"].startswith("REPLACE"):
+        urls.append(spec["url"])
+    urls.extend(spec.get("alt_urls", []))
+    for url in urls:
+        content, score, reason = download(url)
+        if content:
+            print(f"     ✓ explicit: {reason}")
+            candidates.append((content, score + 30, "explicit"))
+        else:
+            print(f"     ✗ explicit: {reason}")
 
-    # 2. Search-based (only if we don't already have a great candidate)
-    if spec.get("search") and (not candidates or max(c[1] for c in candidates) < 100):
-        # Multiple query variants
-        base_query = spec["search"]
-        query_variants = [base_query]
-        # Variant: drop "base" suffix to let parallels in
-        if base_query.lower().endswith(" base"):
-            query_variants.append(base_query[:-5])
-        # Variant: trim noise words
-        compact = re.sub(r"\bWNBA\b|\bPanini\b", "", base_query).strip()
-        compact = re.sub(r"\s+", " ", compact)
-        if compact != base_query:
-            query_variants.append(compact)
-
-        for query in query_variants[:2]:  # max 2 variants per entry to control time
-            urls = search_ebay_product_pages(query)
-            # Try top 5 candidate images; take best-scoring one
-            for url in urls[:5]:
-                time.sleep(SLEEP_BETWEEN_REQUESTS)
-                content, score, reason = download_and_score(url)
+    query = spec.get("search")
+    if query and (not candidates or max(c[1] for c in candidates) < 100):
+        for engine_name, search_fn in [("bing", bing_image_search), ("ddg", ddg_image_search)]:
+            print(f"     ▸ {engine_name}: {query}")
+            try:
+                urls = search_fn(query, max_urls=8)
+            except Exception as e:
+                print(f"     ! {engine_name} crashed: {e}")
+                urls = []
+            print(f"     ▸ {engine_name} returned {len(urls)} urls")
+            tested = 0
+            for u in urls:
+                if tested >= 5:
+                    break
+                time.sleep(0.4)
+                content, score, reason = download(u)
                 if content:
-                    print(f"     ✓ ebay candidate: {reason}")
-                    candidates.append((content, score, f"ebay:{query[:40]}"))
-                    if score >= 100:
-                        break  # good enough, save time
+                    print(f"     ✓ {engine_name}: {reason} {u[:60]}")
+                    candidates.append((content, score, engine_name))
+                tested += 1
             if any(c[1] >= 100 for c in candidates):
                 break
 
     if not candidates:
         return None
-
     candidates.sort(key=lambda c: -c[1])
     best = candidates[0]
-    print(f"     ★ kept best: score={best[1]} from {best[2]}")
+    print(f"     ★ best: score={best[1]} from {best[2]}")
     return best[0]
 
-# ---------- Main ----------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["fill-missing", "refresh-all"], default="fill-missing")
-    ap.add_argument("--limit", type=int, default=0, help="Process at most N entries (0=all)")
+    ap.add_argument("--limit", type=int, default=0)
     args = ap.parse_args()
 
     if not MANIFEST_PATH.exists():
-        print(f"No manifest at {MANIFEST_PATH}.")
+        print("No manifest")
         sys.exit(0)
 
     manifest = json.loads(MANIFEST_PATH.read_text())
     entries = {k: v for k, v in manifest.items() if not k.startswith("_") and isinstance(v, dict)}
-    print(f"Manifest entries: {len(entries)}, mode: {args.mode}\n")
+    print(f"v3 downloader · {len(entries)} entries · mode={args.mode}\n")
 
     new, skipped, failed = 0, 0, []
-    processed = 0
-    for target_path, spec in entries.items():
-        if args.limit and processed >= args.limit:
-            print(f"\n[Limit reached: {args.limit}]")
+    proc = 0
+    for path, spec in entries.items():
+        if args.limit and proc >= args.limit:
+            print(f"\n[limit reached]")
             break
-        full_target = REPO_ROOT / target_path
-        if args.mode == "fill-missing" and full_target.exists():
+        full = REPO_ROOT / path
+        if args.mode == "fill-missing" and full.exists():
             skipped += 1
             continue
-        processed += 1
-        print(f"\n→ [{processed}] {target_path}")
-        full_target.parent.mkdir(parents=True, exist_ok=True)
-        content = resolve(spec, target_path)
+        proc += 1
+        print(f"\n→ [{proc}] {path}")
+        full.parent.mkdir(parents=True, exist_ok=True)
+        content = resolve(spec)
         if content:
-            full_target.write_bytes(content)
-            print(f"   ✓ saved ({len(content)} bytes)")
+            full.write_bytes(content)
+            print(f"   ✓ saved {len(content)}b")
             new += 1
         else:
-            failed.append(target_path)
+            failed.append(path)
             print(f"   ✗ all sources failed")
-        time.sleep(SLEEP_BETWEEN_REQUESTS)
+        time.sleep(SLEEP)
 
-    print(f"\n{'='*60}")
-    print(f"Summary: {new} new, {skipped} already existed, {len(failed)} failed")
+    print(f"\n{'='*60}\nSummary: {new} new · {skipped} existed · {len(failed)} failed")
     if failed:
-        print(f"\n{len(failed)} FAILED — add explicit url in manifest:")
+        print(f"\nFAILED ({len(failed)}):")
         for f in failed:
             print(f"  - {f}")
-    print(f"{'='*60}")
 
 if __name__ == "__main__":
     main()
