@@ -278,3 +278,56 @@ Then trigger the workflow with mode=fill-missing to populate it.
 
 2026-05-03 — initial version after building Bulk Identify tab and
 populating reference library to 151 entries.
+
+---
+
+## Cleanup responsibility
+
+The reference library is built from automated image search — it WILL contain
+some wrong results (e.g. a purple card landing in `parallels/prizm-wnba/green/`).
+This is acceptable for two reasons:
+
+1. Each folder has 8-15 candidates, so even with 10-20% noise there are still
+   plenty of correct examples to compare against
+2. Claude (the assistant) is responsible for filtering noise during identification
+
+### When Claude must clean up
+
+If during card identification, Claude notices that a reference folder contains
+images that don't match the folder's intent (wrong color, wrong product, wrong
+parallel pattern), Claude must:
+
+1. List the offending files in the chat with reasoning ("`parallels/prizm-wnba/green/candidate-007.jpg` is purple, not green")
+2. Generate a deletion bash command for the user to commit:
+
+```bash
+# Cleanup bad references — run from repo root
+cd tempo-tracker-references
+git rm parallels/prizm-wnba/green/candidate-007.jpg
+git rm parallels/prizm-wnba/snakeskin/candidate-002.jpg  # was clearly Ice not Snakeskin
+git commit -m "Cleanup: remove off-target reference candidates"
+git push
+```
+
+Or if there are many, generate a script:
+
+```bash
+#!/bin/bash
+# Bulk reference cleanup — generated 2026-MM-DD
+cd tempo-tracker-references
+git rm parallels/prizm-wnba/green/candidate-007.jpg
+git rm parallels/prizm-wnba/green/candidate-012.jpg
+# ... etc ...
+git commit -m "Bulk cleanup: N off-target reference candidates"
+git push
+```
+
+The user just runs the script. Cleanup is **Claude's responsibility**, not the
+user's. If Claude is getting card identifications wrong because of noisy
+references, the noise is also Claude's problem to fix.
+
+### When the user spots noise
+
+If the user mentions seeing wrong images in a folder ("I saw a purple card
+in the green folder"), Claude should immediately offer to investigate and
+generate cleanup commands without waiting to be asked.
